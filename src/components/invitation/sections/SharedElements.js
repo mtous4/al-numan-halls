@@ -245,7 +245,6 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Auto-advance
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex(prev => (prev + 1) % activePhotos.length);
@@ -430,44 +429,56 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
   );
 }
 
-// ========== Butter-Smooth 60FPS Guided Tour (requestAnimationFrame) ==========
+// ========== Mobile-Guaranteed Butter-Smooth Guided Tour ==========
 export function startGuidedTour() {
+  if (typeof window === 'undefined') return;
+
+  // Small delay so opening transition finishes
   setTimeout(() => {
-    let animationFrameId;
+    let animationId = null;
     let isCancelled = false;
 
-    const stopTour = () => {
-      isCancelled = true;
-      if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('wheel', stopTour);
-      window.removeEventListener('touchstart', stopTour);
-      window.removeEventListener('keydown', stopTour);
-      window.removeEventListener('mousedown', stopTour);
+    // Attach cancellation listeners ONLY after 2 seconds to prevent touch tap on "Open" from aborting it
+    const attachCancelListeners = () => {
+      const onUserInterrupt = () => {
+        isCancelled = true;
+        if (animationId) cancelAnimationFrame(animationId);
+        window.removeEventListener('wheel', onUserInterrupt);
+        window.removeEventListener('touchmove', onUserInterrupt);
+      };
+
+      window.addEventListener('wheel', onUserInterrupt, { passive: true });
+      window.addEventListener('touchmove', onUserInterrupt, { passive: true });
     };
 
-    window.addEventListener('wheel', stopTour, { passive: true });
-    window.addEventListener('touchstart', stopTour, { passive: true });
-    window.addEventListener('keydown', stopTour, { passive: true });
-    window.addEventListener('mousedown', stopTour, { passive: true });
+    setTimeout(attachCancelListeners, 1500);
 
-    const scrollSpeed = 1.15; // Smooth 1.15px per frame = ~70px per second
+    const stepSpeed = 1.35; // ~80px per second on mobile & desktop
 
-    const stepScroll = () => {
+    const scrollLoop = () => {
       if (isCancelled) return;
 
-      const maxScroll = (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight - 40;
-      const currentScroll = window.scrollY || window.pageYOffset || 0;
+      const docHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+        document.body.offsetHeight,
+        document.documentElement.offsetHeight
+      );
+      const winHeight = window.innerHeight || document.documentElement.clientHeight;
+      const maxScroll = docHeight - winHeight - 30;
+      const currentPos = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-      if (currentScroll < maxScroll) {
-        window.scrollTo(0, currentScroll + scrollSpeed);
-        animationFrameId = requestAnimationFrame(stepScroll);
-      } else {
-        stopTour();
+      if (currentPos < maxScroll) {
+        const nextPos = currentPos + stepSpeed;
+        window.scrollTo(0, nextPos);
+        document.documentElement.scrollTop = nextPos;
+        document.body.scrollTop = nextPos;
+        animationId = requestAnimationFrame(scrollLoop);
       }
     };
 
-    animationFrameId = requestAnimationFrame(stepScroll);
-  }, 1000);
+    animationId = requestAnimationFrame(scrollLoop);
+  }, 700);
 }
 
 // ========== Guestbook / سجل التهاني ==========
