@@ -239,14 +239,13 @@ const DEFAULT_FALLBACK_PHOTOS = [
 
 export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
   const displayPhotos = (photos && photos.length > 0) ? photos : DEFAULT_FALLBACK_PHOTOS;
-  // If only 1 photo provided, duplicate it so 3D rotation works nicely
   const activePhotos = displayPhotos.length === 1
     ? [displayPhotos[0], ...DEFAULT_FALLBACK_PHOTOS.slice(1)]
     : displayPhotos;
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Unstoppable active interval autoplay
+  // Auto-advance
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex(prev => (prev + 1) % activePhotos.length);
@@ -276,7 +275,6 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
         ألبوم الزفاف
       </h3>
 
-      {/* 3D Coverflow Container */}
       <div style={{
         position: 'relative',
         width: '100%',
@@ -288,7 +286,6 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
         justifyContent: 'center',
         perspective: '1200px'
       }}>
-        {/* Navigation Arrows */}
         <button
           onClick={handlePrev}
           type="button"
@@ -341,7 +338,6 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
           ❯
         </button>
 
-        {/* 3D Angled Photos */}
         {activePhotos.map((photo, index) => {
           const total = activePhotos.length;
           let diff = (index - currentIndex) % total;
@@ -414,7 +410,6 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
         })}
       </div>
 
-      {/* Dots Indicator */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 'var(--space-4)' }}>
         {activePhotos.map((_, dotIdx) => (
           <div
@@ -435,42 +430,44 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
   );
 }
 
-// ========== Slower, Ultra-Smooth Guided Tour ==========
+// ========== Butter-Smooth 60FPS Guided Tour (requestAnimationFrame) ==========
 export function startGuidedTour() {
   setTimeout(() => {
-    const scrollTarget = document.documentElement || document.body;
-    let currentY = window.scrollY || 0;
-    const targetY = scrollTarget.scrollHeight - window.innerHeight - 80;
+    let animationFrameId;
+    let isCancelled = false;
 
-    if (targetY <= 50) return;
-
-    // Much slower, smoother pace: 320 steps over ~20 seconds
-    let step = 0;
-    const totalSteps = 350;
-    const scrollDistance = (targetY - currentY) / totalSteps;
-
-    const tourInterval = setInterval(() => {
-      currentY += scrollDistance;
-      window.scrollTo(0, currentY);
-      step++;
-
-      if (step >= totalSteps || (window.innerHeight + window.scrollY) >= (scrollTarget.scrollHeight - 50)) {
-        clearInterval(tourInterval);
-      }
-    }, 55);
-
-    // Stop gracefully if user touches or scrolls
     const stopTour = () => {
-      clearInterval(tourInterval);
+      isCancelled = true;
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
       window.removeEventListener('wheel', stopTour);
       window.removeEventListener('touchstart', stopTour);
       window.removeEventListener('keydown', stopTour);
+      window.removeEventListener('mousedown', stopTour);
     };
 
     window.addEventListener('wheel', stopTour, { passive: true });
     window.addEventListener('touchstart', stopTour, { passive: true });
     window.addEventListener('keydown', stopTour, { passive: true });
-  }, 1200);
+    window.addEventListener('mousedown', stopTour, { passive: true });
+
+    const scrollSpeed = 1.15; // Smooth 1.15px per frame = ~70px per second
+
+    const stepScroll = () => {
+      if (isCancelled) return;
+
+      const maxScroll = (document.documentElement.scrollHeight || document.body.scrollHeight) - window.innerHeight - 40;
+      const currentScroll = window.scrollY || window.pageYOffset || 0;
+
+      if (currentScroll < maxScroll) {
+        window.scrollTo(0, currentScroll + scrollSpeed);
+        animationFrameId = requestAnimationFrame(stepScroll);
+      } else {
+        stopTour();
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(stepScroll);
+  }, 1000);
 }
 
 // ========== Guestbook / سجل التهاني ==========
