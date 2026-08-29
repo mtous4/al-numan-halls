@@ -229,38 +229,44 @@ export function ConnectedTimeline({ schedule = [], primaryColor = '#B8944F', dar
   );
 }
 
-// ========== 3D Coverflow Photo Album with Auto-Play ==========
-export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
+// ========== Guaranteed Auto-Playing 3D Coverflow Photo Album Carousel ==========
+const DEFAULT_FALLBACK_PHOTOS = [
+  '/images/gallery/couple-1.jpg',
+  '/images/halls/hall-royal.jpg',
+  '/images/halls/hall-andalus.jpg',
+  '/images/halls/hall-elegance.jpg'
+];
+
+export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
+  const displayPhotos = (photos && photos.length > 0) ? photos : DEFAULT_FALLBACK_PHOTOS;
+  // If only 1 photo provided, duplicate it so 3D rotation works nicely
+  const activePhotos = displayPhotos.length === 1
+    ? [displayPhotos[0], ...DEFAULT_FALLBACK_PHOTOS.slice(1)]
+    : displayPhotos;
+
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
 
-  // Auto-play / Infinite rotation every 2.8 seconds
+  // Unstoppable active interval autoplay
   useEffect(() => {
-    if (!photos || photos.length === 0 || isHovered) return;
-
     const timer = setInterval(() => {
-      setCurrentIndex(prev => (prev + 1) % photos.length);
-    }, 2800);
+      setCurrentIndex(prev => (prev + 1) % activePhotos.length);
+    }, 2200);
 
     return () => clearInterval(timer);
-  }, [photos, isHovered]);
+  }, [activePhotos.length]);
 
-  if (!photos || photos.length === 0) return null;
-
-  const handleNext = () => {
-    setCurrentIndex(prev => (prev + 1) % photos.length);
+  const handleNext = (e) => {
+    if (e) e.stopPropagation();
+    setCurrentIndex(prev => (prev + 1) % activePhotos.length);
   };
 
-  const handlePrev = () => {
-    setCurrentIndex(prev => (prev - 1 + photos.length) % photos.length);
+  const handlePrev = (e) => {
+    if (e) e.stopPropagation();
+    setCurrentIndex(prev => (prev - 1 + activePhotos.length) % activePhotos.length);
   };
 
   return (
-    <div
-      style={{ margin: 'var(--space-8) 0', textAlign: 'center', position: 'relative', overflow: 'hidden', padding: 'var(--space-4) 0' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <div style={{ margin: 'var(--space-8) 0', textAlign: 'center', position: 'relative', overflow: 'hidden', padding: 'var(--space-4) 0' }}>
       <h3 style={{
         fontFamily: 'var(--font-heading)',
         color: primaryColor,
@@ -270,39 +276,40 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
         ألبوم الزفاف
       </h3>
 
-      {/* 3D Coverflow Carousel Container */}
+      {/* 3D Coverflow Container */}
       <div style={{
         position: 'relative',
         width: '100%',
-        maxWidth: 500,
+        maxWidth: 520,
         height: 380,
         margin: '0 auto',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        perspective: '1100px'
+        perspective: '1200px'
       }}>
         {/* Navigation Arrows */}
         <button
           onClick={handlePrev}
+          type="button"
           aria-label="Previous"
           style={{
             position: 'absolute',
-            left: 12,
-            zIndex: 30,
-            width: 40,
-            height: 40,
+            left: 8,
+            zIndex: 35,
+            width: 42,
+            height: 42,
             borderRadius: '50%',
-            background: 'rgba(0,0,0,0.55)',
+            background: 'rgba(30, 24, 15, 0.75)',
             color: '#FFFFFF',
-            border: 'none',
+            border: '1px solid rgba(255,255,255,0.2)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '1.2rem',
+            fontSize: '1.3rem',
             cursor: 'pointer',
-            backdropFilter: 'blur(4px)',
-            transition: 'background 0.2s ease'
+            backdropFilter: 'blur(6px)',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
           }}
         >
           ❮
@@ -310,32 +317,33 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
 
         <button
           onClick={handleNext}
+          type="button"
           aria-label="Next"
           style={{
             position: 'absolute',
-            right: 12,
-            zIndex: 30,
-            width: 40,
-            height: 40,
+            right: 8,
+            zIndex: 35,
+            width: 42,
+            height: 42,
             borderRadius: '50%',
-            background: 'rgba(0,0,0,0.55)',
+            background: 'rgba(30, 24, 15, 0.75)',
             color: '#FFFFFF',
-            border: 'none',
+            border: '1px solid rgba(255,255,255,0.2)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '1.2rem',
+            fontSize: '1.3rem',
             cursor: 'pointer',
-            backdropFilter: 'blur(4px)',
-            transition: 'background 0.2s ease'
+            backdropFilter: 'blur(6px)',
+            boxShadow: '0 4px 15px rgba(0,0,0,0.3)'
           }}
         >
           ❯
         </button>
 
-        {/* 3D Angled Cards */}
-        {photos.map((photo, index) => {
-          const total = photos.length;
+        {/* 3D Angled Photos */}
+        {activePhotos.map((photo, index) => {
+          const total = activePhotos.length;
           let diff = (index - currentIndex) % total;
           if (diff < -Math.floor(total / 2)) diff += total;
           if (diff > Math.floor(total / 2)) diff -= total;
@@ -353,25 +361,25 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
 
           if (isCenter) {
             transform = 'translateX(0) scale(1) rotateY(0deg)';
-            zIndex = 20;
+            zIndex = 25;
             opacity = 1;
             filter = 'brightness(1)';
           } else if (isLeft) {
-            transform = 'translateX(-85px) scale(0.82) rotateY(32deg)';
-            zIndex = 10;
+            transform = 'translateX(-95px) scale(0.82) rotateY(35deg)';
+            zIndex = 15;
             opacity = 0.85;
             filter = 'brightness(0.65)';
           } else if (isRight) {
-            transform = 'translateX(85px) scale(0.82) rotateY(-32deg)';
-            zIndex = 10;
+            transform = 'translateX(95px) scale(0.82) rotateY(-35deg)';
+            zIndex = 15;
             opacity = 0.85;
             filter = 'brightness(0.65)';
           } else if (isFarLeft) {
-            transform = 'translateX(-150px) scale(0.65) rotateY(45deg)';
+            transform = 'translateX(-165px) scale(0.65) rotateY(48deg)';
             zIndex = 5;
             opacity = 0.4;
           } else if (isFarRight) {
-            transform = 'translateX(150px) scale(0.65) rotateY(-45deg)';
+            transform = 'translateX(165px) scale(0.65) rotateY(-48deg)';
             zIndex = 5;
             opacity = 0.4;
           }
@@ -386,12 +394,12 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
                 height: 350,
                 borderRadius: '24px',
                 overflow: 'hidden',
-                boxShadow: isCenter ? '0 25px 50px rgba(0,0,0,0.35)' : '0 15px 30px rgba(0,0,0,0.2)',
+                boxShadow: isCenter ? '0 25px 50px rgba(0,0,0,0.4)' : '0 15px 30px rgba(0,0,0,0.2)',
                 transform,
                 zIndex,
                 opacity,
                 filter,
-                transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+                transition: 'all 0.7s cubic-bezier(0.25, 1, 0.5, 1)',
                 cursor: 'pointer',
                 transformStyle: 'preserve-3d'
               }}
@@ -408,12 +416,12 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
 
       {/* Dots Indicator */}
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 'var(--space-4)' }}>
-        {photos.map((_, dotIdx) => (
+        {activePhotos.map((_, dotIdx) => (
           <div
             key={dotIdx}
             onClick={() => setCurrentIndex(dotIdx)}
             style={{
-              width: dotIdx === currentIndex ? 24 : 8,
+              width: dotIdx === currentIndex ? 26 : 8,
               height: 8,
               borderRadius: 4,
               background: dotIdx === currentIndex ? primaryColor : '#D4C5A0',
@@ -427,39 +435,42 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
   );
 }
 
-// ========== Auto-Guided Smooth Tour Helper ==========
-export function startGuidedTour(containerSelector = null) {
+// ========== Slower, Ultra-Smooth Guided Tour ==========
+export function startGuidedTour() {
   setTimeout(() => {
     const scrollTarget = document.documentElement || document.body;
-    let currentY = window.scrollY;
-    const targetY = scrollTarget.scrollHeight - window.innerHeight - 100;
-    
-    if (targetY <= 0) return;
+    let currentY = window.scrollY || 0;
+    const targetY = scrollTarget.scrollHeight - window.innerHeight - 80;
 
+    if (targetY <= 50) return;
+
+    // Much slower, smoother pace: 320 steps over ~20 seconds
     let step = 0;
-    const totalSteps = 120;
-    const scrollDistance = targetY / totalSteps;
+    const totalSteps = 350;
+    const scrollDistance = (targetY - currentY) / totalSteps;
 
     const tourInterval = setInterval(() => {
       currentY += scrollDistance;
-      window.scrollTo({ top: currentY, behavior: 'smooth' });
+      window.scrollTo(0, currentY);
       step++;
 
-      if (step >= totalSteps || window.scrollY >= targetY) {
+      if (step >= totalSteps || (window.innerHeight + window.scrollY) >= (scrollTarget.scrollHeight - 50)) {
         clearInterval(tourInterval);
       }
-    }, 45);
+    }, 55);
 
-    // Stop auto-scroll if the user interacts
+    // Stop gracefully if user touches or scrolls
     const stopTour = () => {
       clearInterval(tourInterval);
       window.removeEventListener('wheel', stopTour);
       window.removeEventListener('touchstart', stopTour);
+      window.removeEventListener('keydown', stopTour);
     };
 
     window.addEventListener('wheel', stopTour, { passive: true });
     window.addEventListener('touchstart', stopTour, { passive: true });
-  }, 1000);
+    window.addEventListener('keydown', stopTour, { passive: true });
+  }, 1200);
 }
 
 // ========== Guestbook / سجل التهاني ==========
