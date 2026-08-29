@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // ========== Live Arabic Text Countdown ==========
 export function CountdownText({ targetDate, primaryColor = '#B8944F' }) {
@@ -53,9 +53,7 @@ export function WeddingCalendar({ weddingDate, primaryColor = '#B8944F', dark = 
     'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
   ];
 
-  // Days calculation
-  const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun, 6 = Sat
-  // Adjust for Arabic week starting Saturday: Sat(0), Sun(1), Mon(2), Tue(3), Wed(4), Thu(5), Fri(6)
+  const firstDay = new Date(year, month, 1).getDay();
   const arabicFirstDay = (firstDay + 1) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
@@ -87,7 +85,6 @@ export function WeddingCalendar({ weddingDate, primaryColor = '#B8944F', dark = 
       border: `1px solid ${primaryColor}33`,
       textAlign: 'center'
     }}>
-      {/* Month & Year Title */}
       <h4 style={{
         fontFamily: 'var(--font-heading)',
         fontSize: '1.4rem',
@@ -98,14 +95,12 @@ export function WeddingCalendar({ weddingDate, primaryColor = '#B8944F', dark = 
         {monthNames[month]} {year}
       </h4>
 
-      {/* Weekday Headers */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 4, marginBottom: 'var(--space-3)', borderBottom: `1px solid ${primaryColor}22`, paddingBottom: 6 }}>
         {weekHeaders.map((w, i) => (
           <span key={i} style={{ fontSize: '0.8rem', color: dark ? '#A89B88' : '#8A7D6B', fontWeight: '500' }}>{w}</span>
         ))}
       </div>
 
-      {/* Days Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6 }}>
         {calendarCells.map((d, index) => {
           if (!d) return <div key={index} />;
@@ -177,7 +172,6 @@ export function ConnectedTimeline({ schedule = [], primaryColor = '#B8944F', dar
 
   return (
     <div style={{ maxWidth: 360, margin: 'var(--space-6) auto', position: 'relative', padding: 'var(--space-4) var(--space-6)' }}>
-      {/* Central Connecting Vertical Line */}
       <div style={{
         position: 'absolute',
         top: 24,
@@ -197,7 +191,6 @@ export function ConnectedTimeline({ schedule = [], primaryColor = '#B8944F', dar
             justifyContent: 'space-between',
             position: 'relative'
           }}>
-            {/* Title */}
             <div style={{
               width: '42%',
               textAlign: 'right',
@@ -208,7 +201,6 @@ export function ConnectedTimeline({ schedule = [], primaryColor = '#B8944F', dar
               {item.name}
             </div>
 
-            {/* Central Node Dot */}
             <div style={{
               width: 14,
               height: 14,
@@ -219,7 +211,6 @@ export function ConnectedTimeline({ schedule = [], primaryColor = '#B8944F', dar
               flexShrink: 0
             }} />
 
-            {/* Time */}
             <div style={{
               width: '42%',
               textAlign: 'left',
@@ -238,9 +229,21 @@ export function ConnectedTimeline({ schedule = [], primaryColor = '#B8944F', dar
   );
 }
 
-// ========== 3D Stack / Interactive Photo Album Carousel ==========
+// ========== 3D Coverflow Photo Album with Auto-Play ==========
 export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Auto-play / Infinite rotation every 2.8 seconds
+  useEffect(() => {
+    if (!photos || photos.length === 0 || isHovered) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % photos.length);
+    }, 2800);
+
+    return () => clearInterval(timer);
+  }, [photos, isHovered]);
 
   if (!photos || photos.length === 0) return null;
 
@@ -253,62 +256,144 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
   };
 
   return (
-    <div style={{ margin: 'var(--space-8) 0', textAlign: 'center' }}>
+    <div
+      style={{ margin: 'var(--space-8) 0', textAlign: 'center', position: 'relative', overflow: 'hidden', padding: 'var(--space-4) 0' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <h3 style={{
         fontFamily: 'var(--font-heading)',
         color: primaryColor,
-        fontSize: '1.4rem',
-        marginBottom: 'var(--space-4)'
+        fontSize: '1.5rem',
+        marginBottom: 'var(--space-6)'
       }}>
         ألبوم الزفاف
       </h3>
 
-      {/* 3D Stack View */}
+      {/* 3D Coverflow Carousel Container */}
       <div style={{
         position: 'relative',
-        width: 270,
-        height: 360,
+        width: '100%',
+        maxWidth: 500,
+        height: 380,
         margin: '0 auto',
-        perspective: 1000
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        perspective: '1100px'
       }}>
+        {/* Navigation Arrows */}
+        <button
+          onClick={handlePrev}
+          aria-label="Previous"
+          style={{
+            position: 'absolute',
+            left: 12,
+            zIndex: 30,
+            width: 40,
+            height: 40,
+            borderRadius: '50%',
+            background: 'rgba(0,0,0,0.55)',
+            color: '#FFFFFF',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.2rem',
+            cursor: 'pointer',
+            backdropFilter: 'blur(4px)',
+            transition: 'background 0.2s ease'
+          }}
+        >
+          ❮
+        </button>
+
+        <button
+          onClick={handleNext}
+          aria-label="Next"
+          style={{
+            position: 'absolute',
+            right: 12,
+            zIndex: 30,
+            width: 40,
+            height: 40,
+            borderRadius: '50%',
+            background: 'rgba(0,0,0,0.55)',
+            color: '#FFFFFF',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '1.2rem',
+            cursor: 'pointer',
+            backdropFilter: 'blur(4px)',
+            transition: 'background 0.2s ease'
+          }}
+        >
+          ❯
+        </button>
+
+        {/* 3D Angled Cards */}
         {photos.map((photo, index) => {
-          const offset = (index - currentIndex + photos.length) % photos.length;
-          // Only render active, previous, and next
-          if (offset > 2 && offset < photos.length - 1) return null;
+          const total = photos.length;
+          let diff = (index - currentIndex) % total;
+          if (diff < -Math.floor(total / 2)) diff += total;
+          if (diff > Math.floor(total / 2)) diff -= total;
 
-          let transform = 'scale(0.8) translateY(20px)';
+          const isCenter = diff === 0;
+          const isLeft = diff === -1 || (total === 2 && diff === 1);
+          const isRight = diff === 1;
+          const isFarLeft = diff < -1;
+          const isFarRight = diff > 1;
+
+          let transform = '';
           let zIndex = 1;
-          let opacity = 0.4;
+          let opacity = 0;
+          let filter = 'brightness(0.6)';
 
-          if (offset === 0) {
-            transform = 'scale(1) translateY(0)';
-            zIndex = 10;
+          if (isCenter) {
+            transform = 'translateX(0) scale(1) rotateY(0deg)';
+            zIndex = 20;
             opacity = 1;
-          } else if (offset === 1) {
-            transform = 'scale(0.88) translateX(-35px) translateY(10px) rotate(-4deg)';
+            filter = 'brightness(1)';
+          } else if (isLeft) {
+            transform = 'translateX(-85px) scale(0.82) rotateY(32deg)';
+            zIndex = 10;
+            opacity = 0.85;
+            filter = 'brightness(0.65)';
+          } else if (isRight) {
+            transform = 'translateX(85px) scale(0.82) rotateY(-32deg)';
+            zIndex = 10;
+            opacity = 0.85;
+            filter = 'brightness(0.65)';
+          } else if (isFarLeft) {
+            transform = 'translateX(-150px) scale(0.65) rotateY(45deg)';
             zIndex = 5;
-            opacity = 0.7;
-          } else if (offset === photos.length - 1) {
-            transform = 'scale(0.88) translateX(35px) translateY(10px) rotate(4deg)';
+            opacity = 0.4;
+          } else if (isFarRight) {
+            transform = 'translateX(150px) scale(0.65) rotateY(-45deg)';
             zIndex = 5;
-            opacity = 0.7;
+            opacity = 0.4;
           }
 
           return (
             <div
               key={index}
-              onClick={offset !== 0 ? handleNext : undefined}
+              onClick={() => setCurrentIndex(index)}
               style={{
                 position: 'absolute',
-                inset: 0,
-                borderRadius: 'var(--radius-xl)',
+                width: 250,
+                height: 350,
+                borderRadius: '24px',
                 overflow: 'hidden',
-                boxShadow: offset === 0 ? '0 20px 40px rgba(0,0,0,0.25)' : '0 10px 20px rgba(0,0,0,0.15)',
+                boxShadow: isCenter ? '0 25px 50px rgba(0,0,0,0.35)' : '0 15px 30px rgba(0,0,0,0.2)',
                 transform,
                 zIndex,
                 opacity,
-                transition: 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                cursor: 'pointer'
+                filter,
+                transition: 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+                cursor: 'pointer',
+                transformStyle: 'preserve-3d'
               }}
             >
               <img
@@ -321,45 +406,63 @@ export function PhotoAlbumStack({ photos = [], primaryColor = '#B8944F' }) {
         })}
       </div>
 
-      {/* Indicator Counter (e.g., 1 / 5) */}
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 'var(--space-4)', marginTop: 'var(--space-4)' }}>
-        <button
-          onClick={handlePrev}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: primaryColor,
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-            padding: 4
-          }}
-        >
-          ❮
-        </button>
-
-        <span style={{ fontSize: '0.9rem', color: '#8A7D6B', fontWeight: 'bold' }}>
-          {photos.length} / {currentIndex + 1}
-        </span>
-
-        <button
-          onClick={handleNext}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: primaryColor,
-            fontSize: '1.2rem',
-            cursor: 'pointer',
-            padding: 4
-          }}
-        >
-          ❯
-        </button>
+      {/* Dots Indicator */}
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 6, marginTop: 'var(--space-4)' }}>
+        {photos.map((_, dotIdx) => (
+          <div
+            key={dotIdx}
+            onClick={() => setCurrentIndex(dotIdx)}
+            style={{
+              width: dotIdx === currentIndex ? 24 : 8,
+              height: 8,
+              borderRadius: 4,
+              background: dotIdx === currentIndex ? primaryColor : '#D4C5A0',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease'
+            }}
+          />
+        ))}
       </div>
     </div>
   );
 }
 
-// ========== Guestbook / سجل التهاني (Simple Name + Note Only) ==========
+// ========== Auto-Guided Smooth Tour Helper ==========
+export function startGuidedTour(containerSelector = null) {
+  setTimeout(() => {
+    const scrollTarget = document.documentElement || document.body;
+    let currentY = window.scrollY;
+    const targetY = scrollTarget.scrollHeight - window.innerHeight - 100;
+    
+    if (targetY <= 0) return;
+
+    let step = 0;
+    const totalSteps = 120;
+    const scrollDistance = targetY / totalSteps;
+
+    const tourInterval = setInterval(() => {
+      currentY += scrollDistance;
+      window.scrollTo({ top: currentY, behavior: 'smooth' });
+      step++;
+
+      if (step >= totalSteps || window.scrollY >= targetY) {
+        clearInterval(tourInterval);
+      }
+    }, 45);
+
+    // Stop auto-scroll if the user interacts
+    const stopTour = () => {
+      clearInterval(tourInterval);
+      window.removeEventListener('wheel', stopTour);
+      window.removeEventListener('touchstart', stopTour);
+    };
+
+    window.addEventListener('wheel', stopTour, { passive: true });
+    window.addEventListener('touchstart', stopTour, { passive: true });
+  }, 1000);
+}
+
+// ========== Guestbook / سجل التهاني ==========
 export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false }) {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
@@ -399,7 +502,6 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
 
       if (res.ok) {
         setSubmitted(true);
-        // Also persist locally
         if (typeof window !== 'undefined') {
           const stored = localStorage.getItem('alnuman_rsvp') || '[]';
           const list = JSON.parse(stored);
@@ -512,7 +614,6 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
         </form>
       )}
 
-      {/* List of Recent Congratulations */}
       {recentMessages.length > 0 && (
         <div style={{ marginTop: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
           {recentMessages.slice(0, 4).map((msg, i) => (

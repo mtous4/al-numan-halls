@@ -5,7 +5,8 @@ import {
   WeddingCalendar,
   ConnectedTimeline,
   PhotoAlbumStack,
-  GuestbookSection
+  GuestbookSection,
+  startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -51,6 +52,10 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
+      // Trigger guided auto-scroll tour for the visitor
+      if (!isPreview) {
+        startGuidedTour();
+      }
     }, 600);
   };
 
@@ -111,7 +116,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
           <div style={{ position: 'absolute', bottom: 16, right: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
           <div style={{ position: 'absolute', bottom: 16, left: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
 
-          {/* Wax Seal / Heart Icon */}
+          {/* Wax Seal */}
           <div style={{
             width: 70,
             height: 70,
@@ -123,8 +128,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
             color: '#FFFFFF',
             fontSize: '1.8rem',
             marginBottom: 'var(--space-6)',
-            boxShadow: '0 10px 25px rgba(184, 148, 79, 0.4)',
-            animation: 'pulse-gold 2s infinite'
+            boxShadow: '0 10px 25px rgba(184, 148, 79, 0.4)'
           }}>
             💌
           </div>
@@ -191,7 +195,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
       {/* Main Unfolded Invitation Body */}
       {opened && (
         <div style={{ animation: 'slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-          {/* Header Brand */}
           <div style={{
             textAlign: 'center',
             padding: 'var(--space-6) var(--space-4)',
@@ -202,7 +205,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
             <span style={{ fontSize: '0.75rem', color: '#A89B88' }}>قاعات النعمان — Al Numan Halls</span>
           </div>
 
-          {/* Section: Parents & Invitation Text Framed Box */}
           <div style={{ padding: 'var(--space-8) var(--space-4)' }}>
             <div style={{
               maxWidth: 440,
@@ -224,7 +226,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
                 معلومات الحفل
               </h3>
 
-              {/* Parents Two Column */}
               {(groomFather || brideFather) && (
                 <div style={{
                   display: 'flex',
@@ -252,7 +253,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
                 </div>
               )}
 
-              {/* Custom Invitation Paragraph */}
               <p style={{
                 fontSize: '0.95rem',
                 lineHeight: 1.9,
@@ -263,7 +263,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
                 {invitationMessage}
               </p>
 
-              {/* Couple Big Names */}
               <div style={{ margin: 'var(--space-6) 0' }}>
                 <h2 style={{
                   fontFamily: 'var(--font-heading)',
@@ -284,7 +283,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
                 </h2>
               </div>
 
-              {/* Date Block */}
               {weddingDate && (
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${primaryColor}22` }}>
                   <div style={{ fontSize: '0.85rem', color: '#8A7D6B' }}>حفل الزفاف في</div>
@@ -315,13 +313,11 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
             </div>
           </div>
 
-          {/* Section: Live Countdown Text */}
           {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={primaryColor} />}
 
-          {/* Section: Monthly Calendar Grid Widget */}
           {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={primaryColor} />}
 
-          {/* Section: 3D Photo Album Stack */}
+          {/* 3D Coverflow Photo Album Stack with Auto-play */}
           {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={primaryColor} />}
 
           {/* Section: Connected Timeline */}

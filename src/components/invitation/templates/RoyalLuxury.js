@@ -5,7 +5,8 @@ import {
   WeddingCalendar,
   ConnectedTimeline,
   PhotoAlbumStack,
-  GuestbookSection
+  GuestbookSection,
+  startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -51,6 +52,9 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
+      if (!isPreview) {
+        startGuidedTour();
+      }
     }, 600);
   };
 
@@ -180,13 +184,11 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
       {/* Main Unfolded Invitation */}
       {opened && (
         <div style={{ animation: 'slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-          {/* Header */}
           <div style={{ textAlign: 'center', padding: 'var(--space-6) var(--space-4)', borderBottom: '1px solid rgba(212,175,55,0.2)', background: '#12121D' }}>
             <img src="/images/logo.png" alt="قاعات النعمان" style={{ height: 36, margin: '0 auto var(--space-1)', filter: 'brightness(0) invert(1)' }} />
             <span style={{ fontSize: '0.75rem', color: goldPrimary }}>قاعات النعمان — أجنحة الفخامة الملكية</span>
           </div>
 
-          {/* Section: Parents & Message Box */}
           <div style={{ padding: 'var(--space-8) var(--space-4)' }}>
             <div style={{
               maxWidth: 440,
@@ -207,7 +209,6 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
                 معلومات الحفل الملكي
               </h3>
 
-              {/* Parents */}
               {(groomFather || brideFather) && (
                 <div style={{
                   display: 'flex',
@@ -235,7 +236,6 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
                 </div>
               )}
 
-              {/* Message */}
               <p style={{
                 fontSize: '0.95rem',
                 lineHeight: 2,
@@ -246,7 +246,6 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
                 {invitationMessage}
               </p>
 
-              {/* Couple Names */}
               <div style={{ margin: 'var(--space-6) 0' }}>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: '#FFFFFF', margin: 0 }}>
                   {groomFullName || groomName}
@@ -257,7 +256,6 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
                 </h2>
               </div>
 
-              {/* Date */}
               {weddingDate && (
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: '1px solid rgba(212,175,55,0.2)' }}>
                   <div style={{ fontSize: '0.85rem', color: goldPrimary }}>حفل الزفاف في</div>
@@ -288,16 +286,13 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
             </div>
           </div>
 
-          {/* Countdown */}
           {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '20:00'}`} primaryColor={goldPrimary} />}
 
-          {/* Calendar */}
           {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={goldPrimary} dark={true} />}
 
-          {/* 3D Photo Album Stack */}
+          {/* 3D Coverflow Photo Album Stack with Auto-play */}
           {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={goldPrimary} />}
 
-          {/* Connected Timeline */}
           {schedule && schedule.length > 0 && (
             <div style={{ background: '#12121E', padding: 'var(--space-8) var(--space-4)', borderTop: '1px solid rgba(212,175,55,0.2)', borderBottom: '1px solid rgba(212,175,55,0.2)' }}>
               <h3 style={{ textAlign: 'center', color: goldPrimary, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
@@ -307,7 +302,6 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
             </div>
           )}
 
-          {/* Location */}
           <div style={{ background: '#161524', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.2)', borderBottom: '1px solid rgba(212,175,55,0.2)' }}>
             <div style={{ fontSize: '2rem', color: goldPrimary, marginBottom: 'var(--space-2)' }}>📍</div>
             <h3 style={{ color: '#FFFFFF', fontSize: '1.3rem', marginBottom: 'var(--space-1)' }}>
@@ -323,10 +317,8 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
             )}
           </div>
 
-          {/* Guestbook (سجل التهاني) */}
           <GuestbookSection slug={slug} primaryColor={goldPrimary} dark={true} />
 
-          {/* QR */}
           <div style={{ background: '#12121E', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.2)' }}>
             <span style={{ fontSize: '0.8rem', color: '#A89B88', display: 'block', marginBottom: 'var(--space-3)' }}>
               رمز الدعوة الإلكتروني المعتمد

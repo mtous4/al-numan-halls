@@ -5,7 +5,8 @@ import {
   WeddingCalendar,
   ConnectedTimeline,
   PhotoAlbumStack,
-  GuestbookSection
+  GuestbookSection,
+  startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -51,6 +52,9 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
+      if (!isPreview) {
+        startGuidedTour();
+      }
     }, 600);
   };
 
@@ -171,7 +175,6 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
             <span style={{ fontSize: '0.75rem', color: '#999' }}>قاعات النعمان — Al Numan Halls</span>
           </div>
 
-          {/* Section: Parents & Message Box */}
           <div style={{ padding: 'var(--space-8) var(--space-4)' }}>
             <div style={{
               maxWidth: 440,
@@ -267,6 +270,7 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
 
           {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={softGold} />}
 
+          {/* 3D Coverflow Photo Album Stack with Auto-play */}
           {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={softGold} />}
 
           {schedule && schedule.length > 0 && (

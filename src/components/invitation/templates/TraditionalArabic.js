@@ -5,7 +5,8 @@ import {
   WeddingCalendar,
   ConnectedTimeline,
   PhotoAlbumStack,
-  GuestbookSection
+  GuestbookSection,
+  startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { QRCodeSVG } from 'qrcode.react';
 
@@ -52,6 +53,9 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
+      if (!isPreview) {
+        startGuidedTour();
+      }
     }, 600);
   };
 
@@ -274,6 +278,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
 
           {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={emeraldGreen} />}
 
+          {/* 3D Coverflow Photo Album Stack with Auto-play */}
           {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={emeraldGreen} />}
 
           {schedule && schedule.length > 0 && (
