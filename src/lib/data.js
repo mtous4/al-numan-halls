@@ -7,7 +7,7 @@ const STORAGE_KEYS = {
   RSVP: 'alnuman_rsvp',
   HALLS: 'alnuman_halls',
   SERVICES: 'alnuman_services',
-  INITIALIZED_V2: 'alnuman_initialized_v2',
+  INITIALIZED_V3: 'alnuman_initialized_v3',
 };
 
 // ========== Seed Data ==========
@@ -126,40 +126,8 @@ const SEED_INVITATIONS = [
   },
 ];
 
-const SEED_RSVP = [
-  {
-    id: 'rsvp_001',
-    invitationSlug: 'ahmed-fatima-2026',
-    guestName: 'محمد الأحمد',
-    attending: true,
-    message: 'ألف ألف مبروك للعروسين، بارك الله لكما وجمع بينكما في خير.',
-    submittedAt: '2026-08-22T14:30:00',
-  },
-  {
-    id: 'rsvp_002',
-    invitationSlug: 'ahmed-fatima-2026',
-    guestName: 'سارة القاسم',
-    attending: true,
-    message: 'مبارك الزفاف السعيد وبالرفاه والبنين إن شاء الله!',
-    submittedAt: '2026-08-23T09:15:00',
-  },
-  {
-    id: 'rsvp_003',
-    invitationSlug: 'ahmed-fatima-2026',
-    guestName: 'عمر الخطيب',
-    attending: true,
-    message: 'أجمل التهاني والتبريكات بمناسبة الزفاف الميمون.',
-    submittedAt: '2026-08-24T18:00:00',
-  },
-  {
-    id: 'rsvp_004',
-    invitationSlug: 'ahmed-fatima-2026',
-    guestName: 'ياسمين الحاج',
-    attending: true,
-    message: 'فرحتنا لا توصف بكم! تمنياتنا لكم بحياة ملؤها السعادة والتوفيق.',
-    submittedAt: '2026-08-25T11:45:00',
-  },
-];
+// Clean empty RSVP - no fake placeholder messages
+const SEED_RSVP = [];
 
 const SEED_HALLS = [
   {
@@ -249,7 +217,7 @@ const SEED_SERVICES = [
 export function initializeData() {
   if (typeof window === 'undefined') return;
 
-  const initialized = localStorage.getItem(STORAGE_KEYS.INITIALIZED_V2);
+  const initialized = localStorage.getItem(STORAGE_KEYS.INITIALIZED_V3);
   if (initialized) return;
 
   localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(SEED_USERS));
@@ -257,7 +225,7 @@ export function initializeData() {
   localStorage.setItem(STORAGE_KEYS.RSVP, JSON.stringify(SEED_RSVP));
   localStorage.setItem(STORAGE_KEYS.HALLS, JSON.stringify(SEED_HALLS));
   localStorage.setItem(STORAGE_KEYS.SERVICES, JSON.stringify(SEED_SERVICES));
-  localStorage.setItem(STORAGE_KEYS.INITIALIZED_V2, 'true');
+  localStorage.setItem(STORAGE_KEYS.INITIALIZED_V3, 'true');
 }
 
 // ========== Generic Helpers ==========

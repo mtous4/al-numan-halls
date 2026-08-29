@@ -433,12 +433,10 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
 export function startGuidedTour() {
   if (typeof window === 'undefined') return;
 
-  // Small delay so opening transition finishes
   setTimeout(() => {
     let animationId = null;
     let isCancelled = false;
 
-    // Attach cancellation listeners ONLY after 2 seconds to prevent touch tap on "Open" from aborting it
     const attachCancelListeners = () => {
       const onUserInterrupt = () => {
         isCancelled = true;
@@ -453,7 +451,7 @@ export function startGuidedTour() {
 
     setTimeout(attachCancelListeners, 1500);
 
-    const stepSpeed = 1.35; // ~80px per second on mobile & desktop
+    const stepSpeed = 1.35;
 
     const scrollLoop = () => {
       if (isCancelled) return;
@@ -481,25 +479,35 @@ export function startGuidedTour() {
   }, 700);
 }
 
-// ========== Guestbook / سجل التهاني ==========
+// ========== Live Shared Server-Side Guestbook (سجل التهاني المشترك للجميع) ==========
 export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false }) {
   const [name, setName] = useState('');
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [recentMessages, setRecentMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  // Fetch real shared messages from server on mount & poll every 3.5 seconds
+  const fetchMessages = async () => {
+    if (!slug) return;
+    try {
+      const res = await fetch(`/api/rsvp?slug=${encodeURIComponent(slug)}`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) {
+          setMessages(json.data);
+        }
+      }
+    } catch (e) {
+      console.error('Failed to load guestbook messages:', e);
+    }
+  };
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && slug) {
-      const stored = localStorage.getItem('alnuman_rsvp');
-      if (stored) {
-        try {
-          const list = JSON.parse(stored).filter(r => r.invitationSlug === slug && r.message);
-          setRecentMessages(list);
-        } catch {}
-      }
-    }
-  }, [slug, submitted]);
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 3500);
+    return () => clearInterval(interval);
+  }, [slug]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -512,28 +520,18 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           invitationSlug: slug || 'demo',
-          guestName: name,
+          guestName: name.trim(),
           attending: true,
           guestCount: 1,
-          message
+          message: message.trim()
         })
       });
 
       if (res.ok) {
         setSubmitted(true);
-        if (typeof window !== 'undefined') {
-          const stored = localStorage.getItem('alnuman_rsvp') || '[]';
-          const list = JSON.parse(stored);
-          list.push({
-            id: `rsvp_${Date.now()}`,
-            invitationSlug: slug || 'demo',
-            guestName: name,
-            attending: true,
-            message,
-            submittedAt: new Date().toISOString()
-          });
-          localStorage.setItem('alnuman_rsvp', JSON.stringify(list));
-        }
+        setName('');
+        setMessage('');
+        fetchMessages();
       }
     } catch (err) {
       console.error(err);
@@ -561,13 +559,22 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
           borderRadius: 'var(--radius-xl)',
           border: `1px solid ${primaryColor}`,
           textAlign: 'center',
-          animation: 'fadeIn 0.5s ease'
+          animation: 'fadeIn 0.5s ease',
+          marginBottom: 'var(--space-6)'
         }}>
           <div style={{ fontSize: '2.5rem', color: primaryColor, marginBottom: 'var(--space-2)' }}>✨</div>
-          <h4 style={{ color: primaryColor, marginBottom: 'var(--space-2)' }}>تم إرسال تهنئتكم بنجاح</h4>
-          <p style={{ fontSize: 'var(--text-sm)', color: dark ? '#C4B8A8' : '#4D4338', margin: 0 }}>
+          <h4 style={{ color: primaryColor, marginBottom: 'var(--space-2)' }}>تم إرسال تهنئتكم وظهرت للجميع!</h4>
+          <p style={{ fontSize: 'var(--text-sm)', color: dark ? '#C4B8A8' : '#4D4338', margin: '0 0 var(--space-4) 0' }}>
             شكراً لمشاعركم الصادقة ودعواتكم الطيبة للعروسين.
           </p>
+          <button
+            type="button"
+            onClick={() => setSubmitted(false)}
+            className="btn btn-secondary btn-sm"
+            style={{ borderRadius: '20px', borderColor: primaryColor, color: primaryColor }}
+          >
+            ✍️ كتابة تهنئة أخرى
+          </button>
         </div>
       ) : (
         <form onSubmit={handleSubmit} style={{
@@ -599,7 +606,7 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
             <textarea
               required
               className="form-input"
-              placeholder="اكتب تهنئتك *"
+              placeholder="اكتب تهنئتك المباركة للعروسين *"
               rows={3}
               value={message}
               onChange={e => setMessage(e.target.value)}
@@ -628,23 +635,37 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
               cursor: 'pointer'
             }}
           >
-            {loading ? 'جارٍ الإرسال...' : 'إرسال التهنئة'}
+            {loading ? 'جارٍ النشر...' : 'إرسال التهنئة'}
           </button>
         </form>
       )}
 
-      {recentMessages.length > 0 && (
+      {/* Real Shared Messages List */}
+      {messages && messages.length > 0 && (
         <div style={{ marginTop: 'var(--space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-          {recentMessages.slice(0, 4).map((msg, i) => (
-            <div key={i} style={{
+          <div style={{ fontSize: '0.85rem', color: primaryColor, fontWeight: 'bold', textAlign: 'right', marginBottom: 2 }}>
+            💌 رسائل وتبريكات الضيوف ({messages.length}):
+          </div>
+          {messages.map((msg, i) => (
+            <div key={msg.id || i} style={{
               background: dark ? 'rgba(255,255,255,0.04)' : '#F5EFE6',
               padding: 'var(--space-3) var(--space-4)',
               borderRadius: 'var(--radius-md)',
               borderRight: `3px solid ${primaryColor}`,
-              textAlign: 'right'
+              textAlign: 'right',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
             }}>
-              <div style={{ fontWeight: 'bold', fontSize: '0.85rem', color: primaryColor }}>{msg.guestName}</div>
-              <div style={{ fontSize: '0.85rem', color: dark ? '#D4C5A0' : '#4D4338', marginTop: 2 }}>{msg.message}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: primaryColor }}>{msg.guestName}</span>
+                {msg.submittedAt && (
+                  <span style={{ fontSize: '0.7rem', color: dark ? '#888' : '#999' }}>
+                    {new Date(msg.submittedAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric' })}
+                  </span>
+                )}
+              </div>
+              <div style={{ fontSize: '0.88rem', color: dark ? '#D4C5A0' : '#4D4338', marginTop: 4, lineHeight: 1.6 }}>
+                {msg.message}
+              </div>
             </div>
           ))}
         </div>
