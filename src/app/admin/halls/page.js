@@ -90,7 +90,7 @@ function AdminHallsContent() {
                 <div style={{ padding: 'var(--space-5)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-2)' }}>
                     <h3 style={{ fontFamily: 'var(--font-heading)', margin: 0 }}>{hall.name}</h3>
-                    <span className="badge badge-gold">{hall.priceRange}</span>
+                    <span className="badge badge-gold">{hall.badge || hall.nameEn}</span>
                   </div>
                   <p style={{ color: 'var(--warm-gray-600)', fontSize: 'var(--text-sm)', lineHeight: 1.6, marginBottom: 'var(--space-4)' }}>
                     {hall.description.substring(0, 90)}...

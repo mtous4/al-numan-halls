@@ -55,10 +55,11 @@ function HallsContent() {
                       right: 'var(--space-4)',
                       fontSize: 'var(--text-sm)',
                       padding: 'var(--space-2) var(--space-4)',
-                      background: 'rgba(255, 255, 255, 0.95)'
+                      background: 'rgba(255, 255, 255, 0.95)',
+                      boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
                     }}
                   >
-                    {hall.priceRange}
+                    ✦ {hall.badge || hall.nameEn}
                   </span>
                 </div>
 
