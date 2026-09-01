@@ -77,9 +77,7 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
-      if (!isPreview) {
-        startGuidedTour();
-      }
+      startGuidedTour();
     }, 600);
   };
 
@@ -118,14 +116,6 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          {/* Luxury Monogram Wax Seal */}
-          <LuxuryMonogramSeal
-            primaryColor={softGold}
-            groomName={groomName}
-            brideName={brideName}
-            size={70}
-          />
-
           <div style={{
             background: '#FFFFFF',
             border: `1px solid ${softGold}`,

@@ -78,9 +78,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
-      if (!isPreview) {
-        startGuidedTour();
-      }
+      startGuidedTour();
     }, 600);
   };
 
@@ -127,14 +125,6 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
           <p style={{ fontFamily: 'var(--font-heading)', color: emeraldGreen, fontSize: '1.15rem', fontStyle: 'italic', marginBottom: 'var(--space-4)' }}>
             « بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ »
           </p>
-
-          {/* Luxury Monogram Wax Seal */}
-          <LuxuryMonogramSeal
-            primaryColor={emeraldGreen}
-            groomName={groomName}
-            brideName={brideName}
-            size={70}
-          />
 
           <div style={{
             background: 'rgba(255, 255, 255, 0.9)',

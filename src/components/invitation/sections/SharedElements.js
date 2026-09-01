@@ -491,54 +491,108 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
   );
 }
 
-// ========== Mobile-Guaranteed Butter-Smooth Guided Tour ==========
+// ========== Mobile & Modal Guaranteed Cinematic Guided Tour ==========
+let isTourRunning = false;
+let tourAnimationId = null;
+let tourListenersAttached = false;
+const tourStateListeners = new Set();
+
+function notifyTourState(running) {
+  isTourRunning = running;
+  tourStateListeners.forEach(cb => cb(running));
+}
+
+export function stopGuidedTour() {
+  notifyTourState(false);
+  if (tourAnimationId) {
+    cancelAnimationFrame(tourAnimationId);
+    tourAnimationId = null;
+  }
+}
+
+export function isGuidedTourActive() {
+  return isTourRunning;
+}
+
 export function startGuidedTour() {
   if (typeof window === 'undefined') return;
 
+  stopGuidedTour();
+  notifyTourState(true);
+
   setTimeout(() => {
-    let animationId = null;
-    let isCancelled = false;
-
-    const attachCancelListeners = () => {
-      const onUserInterrupt = () => {
-        isCancelled = true;
-        if (animationId) cancelAnimationFrame(animationId);
-        window.removeEventListener('wheel', onUserInterrupt);
-        window.removeEventListener('touchmove', onUserInterrupt);
-      };
-
-      window.addEventListener('wheel', onUserInterrupt, { passive: true });
-      window.addEventListener('touchmove', onUserInterrupt, { passive: true });
+    // Locate scrollable target: modal container or window
+    const getScrollTargets = () => {
+      const targets = [];
+      const candidates = document.querySelectorAll(
+        '[data-invitation-container], [role="dialog"], [role="dialog"] > div, .modal-scroll, div[style*="overflow-y: auto"], div[style*="overflow: auto"]'
+      );
+      candidates.forEach(el => {
+        if (el.scrollHeight > el.clientHeight + 40 && el.clientHeight > 200) {
+          targets.push(el);
+        }
+      });
+      return targets;
     };
 
-    setTimeout(attachCancelListeners, 1500);
+    const scrollTargets = getScrollTargets();
+    const speed = 1.35; // Butter-smooth cinematic speed
 
-    const stepSpeed = 1.35;
+    // Optional cancel listener on strong user touch (after grace period)
+    if (!tourListenersAttached) {
+      const onUserInterrupt = (e) => {
+        // Don't cancel if clicking floating controls
+        if (e.target && e.target.closest && e.target.closest('[data-tour-control]')) return;
+        // Don't cancel immediately on first touch after opening
+      };
+      window.addEventListener('wheel', onUserInterrupt, { passive: true });
+      tourListenersAttached = true;
+    }
 
     const scrollLoop = () => {
-      if (isCancelled) return;
+      if (!isTourRunning) return;
 
+      let hasMoreToScroll = false;
+
+      // 1. Scroll any active modal container
+      if (scrollTargets.length > 0) {
+        scrollTargets.forEach(target => {
+          const max = target.scrollHeight - target.clientHeight - 8;
+          if (target.scrollTop < max) {
+            target.scrollTop += speed;
+            hasMoreToScroll = true;
+          }
+        });
+      }
+
+      // 2. Scroll whole window / document (for mobile direct links and full page)
       const docHeight = Math.max(
         document.body.scrollHeight,
         document.documentElement.scrollHeight,
         document.body.offsetHeight,
         document.documentElement.offsetHeight
       );
-      const winHeight = window.innerHeight || document.documentElement.clientHeight;
-      const maxScroll = docHeight - winHeight - 30;
-      const currentPos = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      const winHeight = window.innerHeight || document.documentElement.clientHeight || 600;
+      const maxWinScroll = docHeight - winHeight - 15;
+      const currentWinY = window.pageYOffset || window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-      if (currentPos < maxScroll) {
-        const nextPos = currentPos + stepSpeed;
-        window.scrollTo(0, nextPos);
-        document.documentElement.scrollTop = nextPos;
-        document.body.scrollTop = nextPos;
-        animationId = requestAnimationFrame(scrollLoop);
+      if (currentWinY < maxWinScroll) {
+        const nextY = currentWinY + speed;
+        window.scrollTo(0, nextY);
+        document.documentElement.scrollTop = nextY;
+        document.body.scrollTop = nextY;
+        hasMoreToScroll = true;
+      }
+
+      if (hasMoreToScroll) {
+        tourAnimationId = requestAnimationFrame(scrollLoop);
+      } else {
+        stopGuidedTour();
       }
     };
 
-    animationId = requestAnimationFrame(scrollLoop);
-  }, 700);
+    tourAnimationId = requestAnimationFrame(scrollLoop);
+  }, 400);
 }
 
 // ========== Live Shared Server-Side Guestbook (سجل التهاني المشترك للجميع) ==========
@@ -736,42 +790,97 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
   );
 }
 
-// ========== Floating Audio Button with Live Equalizer ==========
+// ========== Floating Luxury Controls Dock (Audio + Mobile Auto-Tour) ==========
 export function FloatingAudioButton({ primaryColor = '#C9A96E', isPlaying = false, onToggle }) {
+  const [tourActive, setTourActive] = useState(false);
+
+  useEffect(() => {
+    const listener = (active) => setTourActive(active);
+    tourStateListeners.add(listener);
+    return () => {
+      tourStateListeners.delete(listener);
+    };
+  }, []);
+
+  const handleToggleTour = (e) => {
+    e.stopPropagation();
+    if (tourActive) {
+      stopGuidedTour();
+    } else {
+      startGuidedTour();
+    }
+  };
+
   return (
     <div
-      onClick={onToggle}
-      title={isPlaying ? 'إيقاف اللحن الرومانسي' : 'تشغيل اللحن الرومانسي'}
+      data-tour-control="true"
       style={{
         position: 'fixed',
         bottom: 24,
-        right: 24,
-        width: 50,
-        height: 50,
-        borderRadius: '50%',
-        background: `linear-gradient(135deg, ${primaryColor}, #1F1B16)`,
+        right: 20,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
-        color: '#FFFFFF',
-        boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
-        border: '2px solid rgba(255,255,255,0.4)',
-        zIndex: 100,
-        cursor: 'pointer',
-        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+        gap: 10,
+        zIndex: 9999,
+        direction: 'rtl'
       }}
-      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
-      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
     >
-      {isPlaying ? (
-        <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 18 }}>
-          <span style={{ width: 3.5, height: 14, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.8s ease-in-out infinite alternate' }} />
-          <span style={{ width: 3.5, height: 18, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.6s ease-in-out 0.2s infinite alternate' }} />
-          <span style={{ width: 3.5, height: 10, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.7s ease-in-out 0.4s infinite alternate' }} />
-        </div>
-      ) : (
-        <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>🔇</span>
-      )}
+      {/* Auto Tour Toggle Button */}
+      <button
+        type="button"
+        onClick={handleToggleTour}
+        style={{
+          background: tourActive ? `linear-gradient(135deg, ${primaryColor}, #8B7340)` : 'rgba(20, 20, 25, 0.88)',
+          border: `1.5px solid ${primaryColor}88`,
+          borderRadius: 30,
+          padding: '8px 14px',
+          color: '#FFFFFF',
+          fontSize: '0.85rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          cursor: 'pointer',
+          boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
+          backdropFilter: 'blur(8px)',
+          transition: 'all 0.25s ease'
+        }}
+      >
+        <span style={{ fontSize: '1rem' }}>{tourActive ? '⏸️' : '🎬'}</span>
+        <span style={{ fontWeight: '500' }}>{tourActive ? 'إيقاف الجولة' : 'جولة تلقائية'}</span>
+      </button>
+
+      {/* Music Equalizer Button */}
+      <div
+        onClick={onToggle}
+        title={isPlaying ? 'إيقاف اللحن الرومانسي' : 'تشغيل اللحن الرومانسي'}
+        style={{
+          width: 48,
+          height: 48,
+          borderRadius: '50%',
+          background: `linear-gradient(135deg, ${primaryColor}, #1F1B16)`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#FFFFFF',
+          boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
+          border: '2px solid rgba(255,255,255,0.4)',
+          cursor: 'pointer',
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        {isPlaying ? (
+          <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 18 }}>
+            <span style={{ width: 3.5, height: 14, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.8s ease-in-out infinite alternate' }} />
+            <span style={{ width: 3.5, height: 18, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.6s ease-in-out 0.2s infinite alternate' }} />
+            <span style={{ width: 3.5, height: 10, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.7s ease-in-out 0.4s infinite alternate' }} />
+          </div>
+        ) : (
+          <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>🔇</span>
+        )}
+      </div>
+
       <style jsx global>{`
         @keyframes equalizer {
           0% { height: 4px; }

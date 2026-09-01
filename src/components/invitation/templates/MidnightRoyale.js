@@ -80,9 +80,7 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
-      if (!isPreview) {
-        startGuidedTour();
-      }
+      startGuidedTour();
     }, 600);
   };
 
@@ -122,14 +120,6 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          {/* Luxury Monogram Wax Seal */}
-          <LuxuryMonogramSeal
-            primaryColor={gold}
-            groomName={groomName}
-            brideName={brideName}
-            size={72}
-          />
-
           <div style={{
             background: 'rgba(20, 30, 48, 0.95)',
             border: `2px solid ${gold}`,

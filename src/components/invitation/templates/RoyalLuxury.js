@@ -77,9 +77,7 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
-      if (!isPreview) {
-        startGuidedTour();
-      }
+      startGuidedTour();
     }, 600);
   };
 
@@ -119,14 +117,6 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          {/* Luxury Monogram Wax Seal */}
-          <LuxuryMonogramSeal
-            primaryColor={goldPrimary}
-            groomName={groomName}
-            brideName={brideName}
-            size={76}
-          />
-
           <div style={{
             background: 'rgba(26, 26, 46, 0.85)',
             border: `2px solid ${goldPrimary}66`,

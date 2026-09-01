@@ -80,9 +80,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
-      if (!isPreview) {
-        startGuidedTour();
-      }
+      startGuidedTour();
     }, 600);
   };
 
@@ -122,14 +120,6 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          {/* Luxury Monogram Wax Seal */}
-          <LuxuryMonogramSeal
-            primaryColor={burgundy}
-            groomName={groomName}
-            brideName={brideName}
-            size={72}
-          />
-
           <div style={{
             background: 'rgba(255, 255, 255, 0.96)',
             border: `2px solid ${gold}`,

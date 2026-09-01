@@ -77,10 +77,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
     setTimeout(() => {
       setOpened(true);
       setOpening(false);
-      // Trigger guided auto-scroll tour for the visitor
-      if (!isPreview) {
-        startGuidedTour();
-      }
+      startGuidedTour();
     }, 600);
   };
 
@@ -124,14 +121,6 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
           <div style={{ position: 'absolute', top: 16, left: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
           <div style={{ position: 'absolute', bottom: 16, right: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
           <div style={{ position: 'absolute', bottom: 16, left: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
-
-          {/* Luxury Monogram Wax Seal */}
-          <LuxuryMonogramSeal
-            primaryColor={primaryColor}
-            groomName={groomName}
-            brideName={brideName}
-            size={72}
-          />
 
           <div style={{
             background: 'rgba(255, 255, 255, 0.85)',
