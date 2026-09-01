@@ -296,8 +296,11 @@ export default function EmeraldBotanica({ weddingData = {}, slug = '', isPreview
           <GuestbookSection slug={slug} primaryColor={emerald} />
 
           <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${sage}33` }}>
-            <div style={{ display: 'inline-block', padding: 12, background: '#F6F9F7', borderRadius: '12px', border: `1px solid ${sage}44` }}>
-              <QRCodeSVG value={currentUrl} size={140} fgColor="#1B4D3E" />
+            <span style={{ fontSize: '0.8rem', color: '#6A8F80', display: 'block', marginBottom: 'var(--space-3)' }}>
+              رمز تفاصيل الدعوة
+            </span>
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `1px solid ${sage}`, boxShadow: '0 4px 15px rgba(27,77,62,0.06)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <div style={{ marginTop: 'var(--space-4)', fontSize: '0.75rem', color: emerald }}>قاعات النعمان — Al Numan Halls</div>
           </div>

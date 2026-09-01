@@ -371,8 +371,8 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
             <span style={{ fontSize: '0.8rem', color: '#A89B88', display: 'block', marginBottom: 'var(--space-3)' }}>
               رمز الدعوة الإلكتروني
             </span>
-            <div style={{ display: 'inline-block', padding: 12, background: '#FAFAF7', borderRadius: '12px', border: '1px solid #E8DECC' }}>
-              <QRCodeSVG value={currentUrl} size={140} fgColor="#2C2417" />
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: '1px solid #E8DECC', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: '1px solid #F0ECE6' }}>
               <span style={{ fontSize: '0.75rem', color: '#A89B88' }}>

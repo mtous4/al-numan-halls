@@ -276,8 +276,8 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
           <GuestbookSection slug={slug} primaryColor={softGold} />
 
           <div style={{ padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid #F0ECE6' }}>
-            <div style={{ display: 'inline-block', padding: 8, background: '#FFFFFF', border: '1px solid #EBE5DB', borderRadius: '8px' }}>
-              <QRCodeSVG value={currentUrl} size={130} fgColor="#2C2417" />
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', border: '1px solid #EBE5DB', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <p style={{ fontSize: '0.75rem', color: '#999', marginTop: 'var(--space-2)' }}>رمز الدعوة الرقمية</p>
             <div style={{ marginTop: 'var(--space-4)', fontSize: '0.75rem', color: '#AAA' }}>قاعات النعمان — Al Numan Halls</div>

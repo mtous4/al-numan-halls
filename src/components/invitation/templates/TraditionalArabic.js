@@ -328,8 +328,8 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
             textAlign: 'center',
             borderTop: '1px solid #E8EFE8'
           }}>
-            <div style={{ display: 'inline-block', padding: 10, background: '#F4F7F4', border: '1px solid #C8E6C9', borderRadius: '12px' }}>
-              <QRCodeSVG value={currentUrl} size={140} fgColor="#1B5E20" />
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', border: '1px solid #C8E6C9', borderRadius: '12px', boxShadow: '0 4px 15px rgba(27,94,32,0.06)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <p style={{ fontSize: '0.75rem', color: '#777', marginTop: 'var(--space-3)' }}>رمز الدعوة الإلكتروني</p>
             <div style={{ marginTop: 'var(--space-4)', fontSize: '0.75rem', color: emeraldGreen }}>قاعات النعمان — Al Numan Halls</div>

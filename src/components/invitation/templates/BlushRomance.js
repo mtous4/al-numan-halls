@@ -296,8 +296,11 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
           <GuestbookSection slug={slug} primaryColor={rose} />
 
           <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${blush}33` }}>
-            <div style={{ display: 'inline-block', padding: 12, background: '#FFF9FA', borderRadius: '12px', border: `1px solid ${blush}44` }}>
-              <QRCodeSVG value={currentUrl} size={140} fgColor="#B35467" />
+            <span style={{ fontSize: '0.8rem', color: '#A06D78', display: 'block', marginBottom: 'var(--space-3)' }}>
+              رمز الدعوة الإلكتروني
+            </span>
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `1px solid ${blush}`, boxShadow: '0 4px 15px rgba(179,84,103,0.06)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <div style={{ marginTop: 'var(--space-4)', fontSize: '0.75rem', color: rose }}>قاعات النعمان — Al Numan Halls</div>
           </div>

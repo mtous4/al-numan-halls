@@ -298,8 +298,11 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
           <GuestbookSection slug={slug} primaryColor={gold} isDark={true} />
 
           <div style={{ background: '#080D17', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${gold}33` }}>
-            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `2px solid ${gold}` }}>
-              <QRCodeSVG value={currentUrl} size={140} fgColor="#0B1320" />
+            <span style={{ fontSize: '0.8rem', color: gold, display: 'block', marginBottom: 'var(--space-3)' }}>
+              رمز الدعوة الإلكتروني
+            </span>
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `1px solid ${gold}`, boxShadow: '0 8px 25px rgba(0,0,0,0.6)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <div style={{ marginTop: 'var(--space-4)', fontSize: '0.75rem', color: gold }}>قاعات النعمان — Al Numan Halls</div>
           </div>

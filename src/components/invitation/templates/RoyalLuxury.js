@@ -308,11 +308,11 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
           <GuestbookSection slug={slug} primaryColor={goldPrimary} dark={true} />
 
           <div style={{ background: '#12121E', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.2)' }}>
-            <span style={{ fontSize: '0.8rem', color: '#A89B88', display: 'block', marginBottom: 'var(--space-3)' }}>
-              رمز الدعوة الإلكتروني المعتمد
+            <span style={{ fontSize: '0.8rem', color: goldPrimary, display: 'block', marginBottom: 'var(--space-3)' }}>
+              رمز الدعوة الملكية
             </span>
-            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px' }}>
-              <QRCodeSVG value={currentUrl} size={140} fgColor="#0D0D14" />
+            <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `1px solid ${goldPrimary}66`, boxShadow: '0 8px 25px rgba(0,0,0,0.5)' }}>
+              <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
             </div>
             <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
               <span style={{ fontSize: '0.75rem', color: goldPrimary }}>
