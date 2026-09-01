@@ -1,18 +1,37 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   CountdownText,
   WeddingCalendar,
   ConnectedTimeline,
   PhotoAlbumStack,
   GuestbookSection,
+  FloatingAudioButton,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
+import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
 import { QRCodeSVG } from 'qrcode.react';
 
 export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = false }) {
   const [opened, setOpened] = useState(false);
   const [opening, setOpening] = useState(false);
+  const [musicPlaying, setMusicPlaying] = useState(false);
+
+  useEffect(() => {
+    return () => {
+      weddingSynth.stop();
+    };
+  }, []);
+
+  const handleToggleMusic = () => {
+    if (musicPlaying) {
+      weddingSynth.stop();
+      setMusicPlaying(false);
+    } else {
+      weddingSynth.start();
+      setMusicPlaying(true);
+    }
+  };
 
   const {
     groomName = 'يوسف',
@@ -48,6 +67,9 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
 
   const handleOpenInvitation = () => {
+    playEnvelopeOpenSound();
+    weddingSynth.start();
+    setMusicPlaying(true);
     setOpening(true);
     setTimeout(() => {
       setOpened(true);
@@ -68,29 +90,14 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
       position: 'relative',
       overflow: 'hidden'
     }}>
-      {/* Floating Audio Indicator */}
-      <div style={{
-        position: 'fixed',
-        bottom: 24,
-        right: 24,
-        width: 44,
-        height: 44,
-        borderRadius: '50%',
-        background: `linear-gradient(135deg, ${goldPrimary}, #8B7340)`,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#FFFFFF',
-        boxShadow: '0 4px 15px rgba(0,0,0,0.5)',
-        zIndex: 50,
-        cursor: 'pointer'
-      }}>
-        <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 16 }}>
-          <span style={{ width: 3, height: 12, background: '#fff', borderRadius: 2 }} />
-          <span style={{ width: 3, height: 16, background: '#fff', borderRadius: 2 }} />
-          <span style={{ width: 3, height: 8, background: '#fff', borderRadius: 2 }} />
-        </div>
-      </div>
+      {/* Floating Audio Control Button */}
+      {opened && (
+        <FloatingAudioButton
+          primaryColor={goldPrimary}
+          isPlaying={musicPlaying}
+          onToggle={handleToggleMusic}
+        />
+      )}
 
       {/* Cover Envelope */}
       {!opened && (

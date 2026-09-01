@@ -673,3 +673,50 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
     </div>
   );
 }
+
+// ========== Floating Audio Button with Live Equalizer ==========
+export function FloatingAudioButton({ primaryColor = '#C9A96E', isPlaying = false, onToggle }) {
+  return (
+    <div
+      onClick={onToggle}
+      title={isPlaying ? 'إيقاف اللحن الرومانسي' : 'تشغيل اللحن الرومانسي'}
+      style={{
+        position: 'fixed',
+        bottom: 24,
+        right: 24,
+        width: 50,
+        height: 50,
+        borderRadius: '50%',
+        background: `linear-gradient(135deg, ${primaryColor}, #1F1B16)`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#FFFFFF',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
+        border: '2px solid rgba(255,255,255,0.4)',
+        zIndex: 100,
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+      }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+    >
+      {isPlaying ? (
+        <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 18 }}>
+          <span style={{ width: 3.5, height: 14, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.8s ease-in-out infinite alternate' }} />
+          <span style={{ width: 3.5, height: 18, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.6s ease-in-out 0.2s infinite alternate' }} />
+          <span style={{ width: 3.5, height: 10, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.7s ease-in-out 0.4s infinite alternate' }} />
+        </div>
+      ) : (
+        <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>🔇</span>
+      )}
+      <style jsx global>{`
+        @keyframes equalizer {
+          0% { height: 4px; }
+          100% { height: 18px; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
