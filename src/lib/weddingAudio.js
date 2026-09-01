@@ -1,6 +1,6 @@
 'use client';
 
-// Web Audio API Context Singleton
+// Web Audio API Context for envelope opening sound effect
 let audioCtx = null;
 
 function getAudioContext() {
@@ -17,14 +17,14 @@ function getAudioContext() {
   return audioCtx;
 }
 
-// 1. Chime / Sparkle Sound Effect on opening invitation
+// 1. Crystal Chime Sparkle Sound Effect on opening invitation
 export function playEnvelopeOpenSound() {
   try {
     const ctx = getAudioContext();
     if (!ctx) return;
 
     const now = ctx.currentTime;
-    // Pleasant magical chime chord frequencies (Pentatonic sparkle: C5, E5, G5, B5, D6, G6)
+    // Harmonious crystal pentatonic chime frequencies
     const freqs = [523.25, 659.25, 783.99, 987.77, 1174.66, 1567.98];
 
     freqs.forEach((freq, index) => {
@@ -49,96 +49,63 @@ export function playEnvelopeOpenSound() {
   }
 }
 
-// 2. Romantic Wedding Music Synthesizer Loop (Canon in D / Romantic Piano & Strings Harmonies)
-class RomanticWeddingSynthesizer {
+// 2. Romantic Wedding Music Player (Plays the downloaded 1-minute YouTube wedding melody in a seamless loop)
+class WeddingAudioPlayer {
   constructor() {
+    this.audio = null;
     this.isPlaying = false;
-    this.timer = null;
-    this.activeNodes = [];
-    this.chordIndex = 0;
+  }
+
+  init() {
+    if (typeof window === 'undefined') return;
+    if (!this.audio) {
+      this.audio = new Audio('/audio/wedding-melody.mp3');
+      this.audio.loop = true;
+      this.audio.volume = 0.7;
+      this.audio.preload = 'auto';
+    }
   }
 
   start() {
-    if (this.isPlaying) return;
-    this.isPlaying = true;
+    if (typeof window === 'undefined') return;
+    this.init();
+    if (this.audio) {
+      this.isPlaying = true;
+      this.audio.currentTime = 0;
+      const playPromise = this.audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(err => {
+          console.log('Audio autoplay prevented or error:', err);
+        });
+      }
+    }
+  }
 
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    // Romantic Canon chord progression: D - A - Bm - F#m - G - D - G - A
-    const chords = [
-      // D Major (D4, F#4, A4, D5)
-      [293.66, 369.99, 440.00, 587.33],
-      // A Major (C#4, E4, A4, E5)
-      [277.18, 329.63, 440.00, 659.25],
-      // B Minor (B3, D4, F#4, B4)
-      [246.94, 293.66, 369.99, 493.88],
-      // F# Minor (A3, C#4, F#4, A4)
-      [220.00, 277.18, 369.99, 440.00],
-      // G Major (G3, B3, D4, G4)
-      [196.00, 246.94, 293.66, 392.00],
-      // D Major (D4, F#4, A4, D5)
-      [293.66, 369.99, 440.00, 587.33],
-      // G Major (G3, B3, D4, G4)
-      [196.00, 246.94, 293.66, 392.00],
-      // A Major (A3, C#4, E4, A4)
-      [220.00, 277.18, 329.63, 440.00],
-    ];
-
-    const playNextChord = () => {
-      if (!this.isPlaying) return;
-      const currentChord = chords[this.chordIndex % chords.length];
-      this.chordIndex++;
-
-      const now = ctx.currentTime;
-      const duration = 3.2; // Smooth 3.2s per harmonic bar
-
-      currentChord.forEach((freq, noteIdx) => {
-        // Main soft romantic sine wave
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-
-        osc.type = noteIdx === 0 ? 'sine' : 'triangle';
-        osc.frequency.setValueAtTime(freq, now + noteIdx * 0.12);
-
-        // Lowpass filter for warm intimate acoustic timbre
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(900, now);
-
-        // Soft envelope: slow gentle attack, long sustain, warm decay
-        const baseVolume = noteIdx === 0 ? 0.06 : 0.035;
-        gain.gain.setValueAtTime(0.0001, now + noteIdx * 0.12);
-        gain.gain.linearRampToValueAtTime(baseVolume, now + noteIdx * 0.12 + 0.4);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration + 0.5);
-
-        osc.connect(filter);
-        filter.connect(gain);
-        gain.connect(ctx.destination);
-
-        osc.start(now + noteIdx * 0.12);
-        osc.stop(now + duration + 0.6);
-
-        this.activeNodes.push(osc);
-      });
-
-      this.timer = setTimeout(playNextChord, 2800);
-    };
-
-    playNextChord();
+  resume() {
+    if (typeof window === 'undefined') return;
+    this.init();
+    if (this.audio) {
+      this.isPlaying = true;
+      this.audio.play().catch(e => console.log(e));
+    }
   }
 
   stop() {
-    this.isPlaying = false;
-    if (this.timer) {
-      clearTimeout(this.timer);
-      this.timer = null;
+    if (this.audio) {
+      this.isPlaying = false;
+      this.audio.pause();
     }
-    this.activeNodes.forEach(osc => {
-      try { osc.stop(); } catch (e) {}
-    });
-    this.activeNodes = [];
+  }
+
+  toggle() {
+    if (this.isPlaying) {
+      this.stop();
+      return false;
+    } else {
+      this.resume();
+      return true;
+    }
   }
 }
 
-export const weddingSynth = new RomanticWeddingSynthesizer();
+export const weddingSynth = new WeddingAudioPlayer();
