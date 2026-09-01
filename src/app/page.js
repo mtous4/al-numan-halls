@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useEffect } from 'react';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
@@ -40,19 +40,51 @@ function HomeContent() {
         <div className="hero-overlay" />
         <HeroParticles />
 
-        <div className="hero-content" style={{ position: 'relative', zIndex: 10 }}>
-          <img src="/images/logo-transparent.png" alt="قاعات النعمان" className="hero-logo" />
-          <h1 style={{ textShadow: '0 4px 25px rgba(0,0,0,0.7)', fontSize: 'clamp(2rem, 5vw, 3.5rem)' }}>
-            قاعات النعمان للأفراح والمناسبات الفاخرة
+        <div className="hero-content" style={{ position: 'relative', zIndex: 10, paddingTop: 'var(--space-6)' }}>
+          <img
+            src="/images/logo-transparent.png"
+            alt="قاعات النعمان"
+            style={{
+              height: 120,
+              width: 'auto',
+              margin: '0 auto var(--space-4)',
+              display: 'block',
+              filter: 'drop-shadow(0 6px 20px rgba(0,0,0,0.85)) drop-shadow(0 0 15px rgba(212,175,55,0.45))',
+              transform: 'translateY(10px)'
+            }}
+          />
+          <h1 style={{
+            textShadow: '0 4px 25px rgba(0,0,0,0.8)',
+            fontSize: 'clamp(2.4rem, 6vw, 3.8rem)',
+            fontFamily: 'var(--font-heading)',
+            color: '#FFFFFF',
+            margin: '0 0 var(--space-6) 0'
+          }}>
+            قاعات النعمان
           </h1>
-          <p style={{ textShadow: '0 2px 10px rgba(0,0,0,0.7)', maxWidth: 680, margin: '0 auto var(--space-6)', fontSize: '1.15rem', lineHeight: 1.8 }}>
-            ثلاث قاعات ملكية استثنائية في قلب عمّان، تجمع بين فخامة الديكور، كرم الضيافة الأصيل، وأحدث تقنيات الإضاءة والصوت لليلة زفاف أسطورية لا تُنسى.
-          </p>
-          <div className="hero-actions">
-            <Link href="/halls" className="btn btn-primary btn-lg" style={{ boxShadow: '0 8px 30px rgba(212,175,55,0.4)' }}>
+          
+          <div className="hero-actions" style={{ marginTop: 0, gap: 'var(--space-3)' }}>
+            <Link
+              href="/halls"
+              className="btn btn-primary"
+              style={{
+                padding: '10px 24px',
+                fontSize: '0.95rem',
+                borderRadius: '30px',
+                boxShadow: '0 6px 25px rgba(212,175,55,0.35)'
+              }}
+            >
               استكشف القاعات الملكية ✦
             </Link>
-            <Link href="/contact" className="btn btn-white btn-lg">
+            <Link
+              href="/contact"
+              className="btn btn-white"
+              style={{
+                padding: '10px 24px',
+                fontSize: '0.95rem',
+                borderRadius: '30px'
+              }}
+            >
               احجز موعداً للمعاينة
             </Link>
           </div>
