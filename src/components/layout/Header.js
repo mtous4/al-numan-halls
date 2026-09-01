@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { label: 'الخدمات', href: '/services' },
   { label: 'معرض الصور', href: '/gallery' },
   { label: 'الدعوات الإلكترونية', href: '/invitations' },
+  { label: 'ألبوم الفعاليات 📸', href: '/events' },
   { label: 'من نحن', href: '/about' },
   { label: 'تواصل معنا', href: '/contact' },
 ];

@@ -4,8 +4,9 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
 import Header from '@/components/layout/Header';
-import { getInvitationByCustomerId, getRSVPSummary, publishInvitation, unpublishInvitation } from '@/lib/data';
+import { getInvitationByCustomerId, publishInvitation, unpublishInvitation } from '@/lib/data';
 import { getTemplateById } from '@/lib/templates';
+import { getEvents } from '@/lib/eventAlbum';
 import { QRCodeSVG } from 'qrcode.react';
 
 function DashboardContent() {
@@ -13,7 +14,7 @@ function DashboardContent() {
   const router = useRouter();
   const [invitation, setInvitation] = useState(null);
   const [template, setTemplate] = useState(null);
-  const [rsvpSummary, setRsvpSummary] = useState(null);
+  const [events, setEvents] = useState([]);
   const [copied, setCopied] = useState(false);
   const [showQR, setShowQR] = useState(false);
 
@@ -36,10 +37,9 @@ function DashboardContent() {
     if (inv) {
       setInvitation(inv);
       setTemplate(getTemplateById(inv.templateId));
-      if (inv.slug) {
-        setRsvpSummary(getRSVPSummary(inv.slug));
-      }
     }
+    const allEvts = getEvents();
+    setEvents(allEvts);
   };
 
   const handlePublish = () => {
@@ -92,12 +92,12 @@ function DashboardContent() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-8)', flexWrap: 'wrap', gap: 'var(--space-4)' }}>
             <div>
               <h2 style={{ marginBottom: 'var(--space-1)' }}>مرحبًا، {user.name}</h2>
-              <p className="text-muted" style={{ margin: 0 }}>إدارة دعوة زفافك الإلكترونية</p>
+              <p className="text-muted" style={{ margin: 0 }}>لوحة التحكم في خدمات قاعات النعمان ودعواتك وألبوم صور الحفل</p>
             </div>
             <button onClick={logout} className="btn btn-secondary btn-sm">تسجيل الخروج</button>
           </div>
 
-          {/* Stats */}
+          {/* Stats Grid */}
           <div className="stats-grid" style={{ marginBottom: 'var(--space-8)' }}>
             <div className="stat-card">
               <div className="stat-card-value">{invitation?.status === 'published' ? '✅' : '📝'}</div>
@@ -111,19 +111,17 @@ function DashboardContent() {
               <div className="stat-card-value">{wd?.weddingDate || '—'}</div>
               <div className="stat-card-label">تاريخ الزفاف</div>
             </div>
-            {rsvpSummary && (
-              <div className="stat-card">
-                <div className="stat-card-value">{rsvpSummary.totalGuests}</div>
-                <div className="stat-card-label">إجمالي الضيوف المؤكدين</div>
-              </div>
-            )}
+            <div className="stat-card">
+              <div className="stat-card-value" style={{ color: 'var(--gold-primary)' }}>📸 {events.length}</div>
+              <div className="stat-card-label">ألبومات الـ QR التفاعلية</div>
+            </div>
           </div>
 
           <div className="grid grid-2" style={{ gap: 'var(--space-6)' }}>
             {/* Invitation Card */}
             <div className="card" style={{ cursor: 'default' }}>
               <div className="card-body">
-                <h3 style={{ fontFamily: 'var(--font-heading)', marginBottom: 'var(--space-4)' }}>دعوتي</h3>
+                <h3 style={{ fontFamily: 'var(--font-heading)', marginBottom: 'var(--space-4)' }}>بطاقة الدعوة الإلكترونية</h3>
 
                 {wd?.groomName && wd?.brideName ? (
                   <div style={{ textAlign: 'center', padding: 'var(--space-6)', background: 'var(--cream)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-4)' }}>
@@ -145,23 +143,47 @@ function DashboardContent() {
                 )}
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-                  <Link href="/dashboard/editor" className="btn btn-primary" style={{ width: '100%' }}>✏️ تعديل الدعوة</Link>
+                  <Link href="/dashboard/editor" className="btn btn-primary" style={{ width: '100%' }}>✏️ تعديل ومحرر الدعوة</Link>
                   <Link href="/dashboard/templates" className="btn btn-secondary" style={{ width: '100%' }}>🎨 تغيير القالب</Link>
+                  <Link href="/dashboard/rsvp" className="btn btn-secondary" style={{ width: '100%' }}>💌 سجل تهاني الضيوف</Link>
                   {invitation?.status === 'draft' ? (
-                    <button onClick={handlePublish} className="btn btn-primary" style={{ width: '100%', background: 'var(--success)', boxShadow: 'none' }}>🚀 نشر الدعوة</button>
+                    <button onClick={handlePublish} className="btn btn-primary" style={{ width: '100%', background: 'var(--success)', boxShadow: 'none' }}>🚀 نشر الدعوة وتوليد الرابط</button>
                   ) : (
                     <button onClick={handleUnpublish} className="btn btn-secondary" style={{ width: '100%', borderColor: 'var(--error)', color: 'var(--error)' }}>إلغاء النشر</button>
                   )}
                   {invitation?.slug && invitation?.status === 'published' && (
-                    <Link href={`/invite/${invitation.slug}`} target="_blank" className="btn btn-secondary" style={{ width: '100%' }}>👁️ معاينة الدعوة</Link>
+                    <Link href={`/invite/${invitation.slug}`} target="_blank" className="btn btn-secondary" style={{ width: '100%' }}>👁️ فتح الرابط المنشور</Link>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* Share / RSVP Panel */}
+            {/* Event Album & Share Panel */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-              {/* Share */}
+
+              {/* Event Album Card */}
+              <div className="card" style={{ cursor: 'default', border: '2px solid var(--gold-primary)' }}>
+                <div className="card-body">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)', marginBottom: 'var(--space-2)' }}>
+                    <span style={{ fontSize: '1.5rem' }}>📸</span>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', margin: 0, color: 'var(--gold-dark)' }}>ألبوم صور الحفل التفاعلي (QR)</h3>
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--warm-gray-600)', lineHeight: 1.6, marginBottom: 'var(--space-4)' }}>
+                    اجمع كافة صور وذكريات الحفل من هواتف ضيوفك بمسحة QR Code واحدة مع فلاتر الأعراس وإطارات قاعات النعمان الملكية.
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+                    <Link href="/dashboard/events" className="btn btn-primary" style={{ width: '100%', textAlign: 'center' }}>
+                      ⚙️ إدارة ألبومات الفعاليات ورموز الـ QR
+                    </Link>
+                    <Link href="/album/NUMAN-2027" target="_blank" className="btn btn-secondary" style={{ width: '100%', textAlign: 'center' }}>
+                      👁️ تجربة كاميرا الضيف الحية
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Share Panel */}
               {invitation?.status === 'published' && invitation?.slug && (
                 <div className="share-panel">
                   <h4 style={{ fontFamily: 'var(--font-heading)', marginBottom: 'var(--space-4)' }}>مشاركة الدعوة</h4>
@@ -184,31 +206,6 @@ function DashboardContent() {
                 </div>
               )}
 
-              {/* RSVP Summary */}
-              {rsvpSummary && rsvpSummary.total > 0 && (
-                <div className="card" style={{ cursor: 'default' }}>
-                  <div className="card-body">
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'var(--space-4)' }}>
-                      <h4 style={{ fontFamily: 'var(--font-heading)', margin: 0 }}>ردود الضيوف</h4>
-                      <Link href="/dashboard/rsvp" className="text-gold text-sm">عرض الكل ←</Link>
-                    </div>
-                    <div className="stats-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--fw-bold)', color: 'var(--success)' }}>{rsvpSummary.confirmed}</div>
-                        <div className="text-sm text-muted">مؤكد</div>
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--fw-bold)', color: 'var(--error)' }}>{rsvpSummary.declined}</div>
-                        <div className="text-sm text-muted">اعتذر</div>
-                      </div>
-                      <div style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: 'var(--text-2xl)', fontWeight: 'var(--fw-bold)', color: 'var(--gold-primary)' }}>{rsvpSummary.totalGuests}</div>
-                        <div className="text-sm text-muted">ضيوف</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>
