@@ -86,10 +86,55 @@ function LoginForm() {
           </button>
         </form>
 
-        <div style={{ marginTop: 'var(--space-8)', padding: 'var(--space-4)', background: 'var(--off-white)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', color: 'var(--warm-gray-500)' }}>
-          <p style={{ margin: '0 0 var(--space-2)', fontWeight: 'var(--fw-medium)', color: 'var(--dark-brown)' }}>حسابات تجريبية:</p>
-          <p style={{ margin: '0 0 var(--space-1)' }}>مدير: admin / admin123</p>
-          <p style={{ margin: 0 }}>عميل: ahmed2026 / ahmed123</p>
+        <div style={{ marginTop: 'var(--space-8)', padding: 'var(--space-4)', background: 'var(--off-white)', borderRadius: 'var(--radius-md)', fontSize: 'var(--text-sm)', color: 'var(--warm-gray-500)', textAlign: 'center' }}>
+          <p style={{ margin: '0 0 var(--space-1)', fontWeight: 'var(--fw-medium)', color: 'var(--dark-brown)' }}>حسابات تجريبية:</p>
+          <p style={{ margin: '0 0 var(--space-2)', fontSize: '0.78rem', color: 'var(--gold-dark)', fontWeight: '500' }}>
+            (اليسار: اسم المستخدم / اليمين: كلمة المرور)
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', textAlign: 'center' }}>
+            <div
+              onClick={() => { setUsername('admin'); setPassword('admin123'); }}
+              style={{
+                cursor: 'pointer',
+                padding: '6px 10px',
+                background: '#FFFFFF',
+                borderRadius: '6px',
+                border: '1px solid #EBE5DB',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                fontSize: '0.85rem'
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-primary)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#EBE5DB'}
+              title="اضغط للتعبئة التلقائية"
+            >
+              <span style={{ fontWeight: 'bold', color: 'var(--dark-brown)' }}>مدير:</span>
+              <code style={{ direction: 'ltr', color: 'var(--gold-dark)', fontWeight: 'bold' }}>admin / admin123</code>
+            </div>
+            <div
+              onClick={() => { setUsername('ahmed2026'); setPassword('ahmed123'); }}
+              style={{
+                cursor: 'pointer',
+                padding: '6px 10px',
+                background: '#FFFFFF',
+                borderRadius: '6px',
+                border: '1px solid #EBE5DB',
+                transition: 'all 0.2s ease',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                fontSize: '0.85rem'
+              }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--gold-primary)'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = '#EBE5DB'}
+              title="اضغط للتعبئة التلقائية"
+            >
+              <span style={{ fontWeight: 'bold', color: 'var(--dark-brown)' }}>عميل:</span>
+              <code style={{ direction: 'ltr', color: 'var(--gold-dark)', fontWeight: 'bold' }}>ahmed2026 / ahmed123</code>
+            </div>
+          </div>
         </div>
       </div>
     </div>

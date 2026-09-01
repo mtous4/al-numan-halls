@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -274,14 +275,21 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '20:00'}`} primaryColor={goldPrimary} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '20:00'}`} primaryColor={goldPrimary} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={goldPrimary} dark={true} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={goldPrimary} dark={true} />}
+          </RevealSection>
 
           {/* 3D Coverflow Photo Album Stack with Auto-play */}
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={goldPrimary} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={goldPrimary} />}
+          </RevealSection>
 
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{ background: '#12121E', padding: 'var(--space-8) var(--space-4)', borderTop: '1px solid rgba(212,175,55,0.2)', borderBottom: '1px solid rgba(212,175,55,0.2)' }}>
               <h3 style={{ textAlign: 'center', color: goldPrimary, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
                 برنامج اليوم
@@ -289,6 +297,7 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
               <ConnectedTimeline schedule={schedule} primaryColor={goldPrimary} dark={true} />
             </div>
           )}
+          </RevealSection>
 
           <div style={{ background: '#161524', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.2)', borderBottom: '1px solid rgba(212,175,55,0.2)' }}>
             <div style={{ fontSize: '2rem', color: goldPrimary, marginBottom: 'var(--space-2)' }}>📍</div>
@@ -305,7 +314,9 @@ export default function RoyalLuxury({ weddingData = {}, slug = '', isPreview = f
             )}
           </div>
 
-          <GuestbookSection slug={slug} primaryColor={goldPrimary} dark={true} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={goldPrimary} dark={true} />
+          </RevealSection>
 
           <div style={{ background: '#12121E', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid rgba(212,175,55,0.2)' }}>
             <span style={{ fontSize: '0.8rem', color: goldPrimary, display: 'block', marginBottom: 'var(--space-3)' }}>

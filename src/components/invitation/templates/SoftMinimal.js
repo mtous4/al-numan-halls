@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -243,14 +244,21 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={softGold} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={softGold} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={softGold} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={softGold} />}
+          </RevealSection>
 
           {/* 3D Coverflow Photo Album Stack with Auto-play */}
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={softGold} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={softGold} />}
+          </RevealSection>
 
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{ background: '#FAFAF7', padding: 'var(--space-8) var(--space-4)', borderTop: '1px solid #EBE5DB', borderBottom: '1px solid #EBE5DB' }}>
               <h3 style={{ textAlign: 'center', color: '#2C2417', fontFamily: 'var(--font-heading)', fontSize: '1.4rem', marginBottom: 'var(--space-4)', fontWeight: 'normal' }}>
                 برنامج اليوم
@@ -258,6 +266,7 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
               <ConnectedTimeline schedule={schedule} primaryColor={softGold} />
             </div>
           )}
+          </RevealSection>
 
           <div style={{ padding: 'var(--space-8) var(--space-4)', textAlign: 'center', background: '#FAFAF7', borderTop: '1px solid #EBE5DB' }}>
             <h3 style={{ color: '#2C2417', fontSize: '1.2rem', marginBottom: 'var(--space-1)', fontWeight: 'normal' }}>
@@ -273,7 +282,9 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
             )}
           </div>
 
-          <GuestbookSection slug={slug} primaryColor={softGold} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={softGold} />
+          </RevealSection>
 
           <div style={{ padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: '1px solid #F0ECE6' }}>
             <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', border: '1px solid #EBE5DB', borderRadius: '12px', boxShadow: '0 4px 15px rgba(0,0,0,0.04)' }}>

@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -302,15 +303,22 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={primaryColor} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={primaryColor} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={primaryColor} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={primaryColor} />}
+          </RevealSection>
 
           {/* 3D Coverflow Photo Album Stack with Auto-play */}
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={primaryColor} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={primaryColor} />}
+          </RevealSection>
 
           {/* Section: Connected Timeline */}
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{
               background: '#FFFFFF',
               padding: 'var(--space-8) var(--space-4)',
@@ -329,6 +337,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
               <ConnectedTimeline schedule={schedule} primaryColor={primaryColor} />
             </div>
           )}
+          </RevealSection>
 
           {/* Section: Location */}
           <div style={{
@@ -359,7 +368,9 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
           </div>
 
           {/* Section: Guestbook (سجل التهاني) */}
-          <GuestbookSection slug={slug} primaryColor={primaryColor} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={primaryColor} />
+          </RevealSection>
 
           {/* Section: QR Code & Footer */}
           <div style={{

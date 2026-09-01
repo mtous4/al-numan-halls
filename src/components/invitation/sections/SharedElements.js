@@ -24,6 +24,54 @@ export function formatArabicDate(dateString) {
   };
 }
 
+// ========== Staggered On-Scroll & On-Open Reveal Component ==========
+export function RevealSection({ children, delay = 0, style = {}, className = '' }) {
+  const [isVisible, setIsVisible] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(el);
+        }
+      },
+      {
+        threshold: 0.05,
+        rootMargin: '0px 0px -20px 0px'
+      }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(32px) scale(0.98)',
+        transition: `opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s, transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) ${delay}s`,
+        willChange: 'opacity, transform',
+        ...style
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 // ========== Luxury Gold Seal (No Emojis) ==========
 export function LuxuryMonogramSeal({ primaryColor = '#B8944F', groomName = '', brideName = '', size = 66 }) {
   const gInitial = groomName ? groomName.trim().charAt(0) : 'ي';

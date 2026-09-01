@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -265,13 +266,20 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={gold} isDark={true} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={gold} isDark={true} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={gold} isDark={true} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={gold} isDark={true} />}
+          </RevealSection>
 
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={gold} isDark={true} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={gold} isDark={true} />}
+          </RevealSection>
 
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{ background: '#080D17', padding: 'var(--space-8) var(--space-4)', borderTop: `1px solid ${gold}33`, borderBottom: `1px solid ${gold}33` }}>
               <h3 style={{ textAlign: 'center', color: gold, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
                 برنامج اليوم الملكي
@@ -279,6 +287,7 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
               <ConnectedTimeline schedule={schedule} primaryColor={gold} isDark={true} />
             </div>
           )}
+          </RevealSection>
 
           <div style={{ background: navyCard, padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${gold}33`, borderBottom: `1px solid ${gold}33` }}>
             <div style={{ fontSize: '2rem', color: gold, marginBottom: 'var(--space-2)' }}>📍</div>
@@ -295,7 +304,9 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
             )}
           </div>
 
-          <GuestbookSection slug={slug} primaryColor={gold} isDark={true} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={gold} isDark={true} />
+          </RevealSection>
 
           <div style={{ background: '#080D17', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${gold}33` }}>
             <span style={{ fontSize: '0.8rem', color: gold, display: 'block', marginBottom: 'var(--space-3)' }}>

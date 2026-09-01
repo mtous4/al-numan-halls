@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -264,13 +265,20 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={burgundy} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={burgundy} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={burgundy} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={burgundy} />}
+          </RevealSection>
 
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={burgundy} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={burgundy} />}
+          </RevealSection>
 
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', borderTop: `1px solid ${gold}33`, borderBottom: `1px solid ${gold}33` }}>
               <h3 style={{ textAlign: 'center', color: burgundy, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
                 برنامج اليوم
@@ -278,6 +286,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
               <ConnectedTimeline schedule={schedule} primaryColor={burgundy} />
             </div>
           )}
+          </RevealSection>
 
           <div style={{ background: '#F7EBEF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${gold}33`, borderBottom: `1px solid ${gold}33` }}>
             <div style={{ fontSize: '2rem', color: burgundy, marginBottom: 'var(--space-2)' }}>📍</div>
@@ -294,7 +303,9 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
             )}
           </div>
 
-          <GuestbookSection slug={slug} primaryColor={burgundy} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={burgundy} />
+          </RevealSection>
 
           <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${gold}33` }}>
             <span style={{ fontSize: '0.8rem', color: burgundy, display: 'block', marginBottom: 'var(--space-3)' }}>

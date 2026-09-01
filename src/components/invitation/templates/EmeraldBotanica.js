@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -263,13 +264,20 @@ export default function EmeraldBotanica({ weddingData = {}, slug = '', isPreview
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={emerald} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={emerald} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={emerald} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={emerald} />}
+          </RevealSection>
 
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={emerald} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={emerald} />}
+          </RevealSection>
 
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', borderTop: `1px solid ${sage}33`, borderBottom: `1px solid ${sage}33` }}>
               <h3 style={{ textAlign: 'center', color: emerald, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
                 برنامج اليوم
@@ -277,6 +285,7 @@ export default function EmeraldBotanica({ weddingData = {}, slug = '', isPreview
               <ConnectedTimeline schedule={schedule} primaryColor={emerald} />
             </div>
           )}
+          </RevealSection>
 
           <div style={{ background: '#EEF5F1', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${sage}33`, borderBottom: `1px solid ${sage}33` }}>
             <div style={{ fontSize: '2rem', color: emerald, marginBottom: 'var(--space-2)' }}>📍</div>
@@ -293,7 +302,9 @@ export default function EmeraldBotanica({ weddingData = {}, slug = '', isPreview
             )}
           </div>
 
-          <GuestbookSection slug={slug} primaryColor={emerald} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={emerald} />
+          </RevealSection>
 
           <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${sage}33` }}>
             <span style={{ fontSize: '0.8rem', color: '#6A8F80', display: 'block', marginBottom: 'var(--space-3)' }}>

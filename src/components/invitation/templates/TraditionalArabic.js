@@ -7,6 +7,7 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  RevealSection,
   LuxuryMonogramSeal,
   formatArabicDate,
   startGuidedTour
@@ -277,14 +278,21 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
             </div>
           </div>
 
-          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={emeraldGreen} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={emeraldGreen} />}
+          </RevealSection>
 
-          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={emeraldGreen} />}
+          <RevealSection delay={0.1}>
+            {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={emeraldGreen} />}
+          </RevealSection>
 
           {/* 3D Coverflow Photo Album Stack with Auto-play */}
-          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={emeraldGreen} />}
+          <RevealSection delay={0.1}>
+            {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={emeraldGreen} />}
+          </RevealSection>
 
-          {schedule && schedule.length > 0 && (
+          <RevealSection delay={0.1}>
+            {schedule && schedule.length > 0 && (
             <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', borderTop: '1px solid #E8EFE8', borderBottom: '1px solid #E8EFE8' }}>
               <h3 style={{ textAlign: 'center', color: emeraldGreen, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
                 برنامج اليوم
@@ -292,6 +300,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
               <ConnectedTimeline schedule={schedule} primaryColor={emeraldGreen} />
             </div>
           )}
+          </RevealSection>
 
           <div style={{
             background: '#F4F7F4',
@@ -320,7 +329,9 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
             )}
           </div>
 
-          <GuestbookSection slug={slug} primaryColor={emeraldGreen} />
+          <RevealSection delay={0.1}>
+            <GuestbookSection slug={slug} primaryColor={emeraldGreen} />
+          </RevealSection>
 
           <div style={{
             background: '#FFFFFF',
