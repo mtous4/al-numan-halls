@@ -1,4 +1,4 @@
-// Template Registry - Defines available invitation templates
+// Template Registry - Defines all available invitation templates
 
 export const TEMPLATES = [
   {
@@ -32,6 +32,74 @@ export const TEMPLATES = [
       bg: '#0F0F1A',
     },
     previewImage: '/images/templates/royal-luxury.jpg',
+    sections: ['cover', 'couple', 'family', 'date', 'countdown', 'schedule', 'gallery', 'location', 'rsvp', 'messages', 'qrcode'],
+    active: true,
+  },
+  {
+    id: 'emerald-botanica',
+    name: 'الزمرد والأوراق النباتية',
+    nameEn: 'Emerald Botanica',
+    category: 'طبيعي',
+    description: 'تصميم أوراق الطبيعة الخضراء والزمرد الفاخر بلمسات ذهبية عصرية',
+    colors: {
+      primary: '#1B4D3E',
+      secondary: '#EDF4F0',
+      accent: '#C9A96E',
+      text: '#1B3B30',
+      bg: '#F6F9F7',
+    },
+    previewImage: '/images/gallery/gallery-7.jpg',
+    sections: ['cover', 'couple', 'family', 'date', 'countdown', 'schedule', 'gallery', 'location', 'rsvp', 'messages', 'qrcode'],
+    active: true,
+  },
+  {
+    id: 'blush-romance',
+    name: 'الوردي الرومانسي',
+    nameEn: 'Blush Romance',
+    category: 'رومانسي',
+    description: 'أجواء الورد والوردي الباستيل الرقيق مع لمسات من الذهب والشموع',
+    colors: {
+      primary: '#B35467',
+      secondary: '#FFF0F3',
+      accent: '#C9A96E',
+      text: '#3B242B',
+      bg: '#FFF9FA',
+    },
+    previewImage: '/images/gallery/gallery-5.jpg',
+    sections: ['cover', 'couple', 'family', 'date', 'countdown', 'schedule', 'gallery', 'location', 'rsvp', 'messages', 'qrcode'],
+    active: true,
+  },
+  {
+    id: 'midnight-royale',
+    name: 'الكحلي والذهب الملكي',
+    nameEn: 'Midnight Royale',
+    category: 'فاخر',
+    description: 'سماء كحلية ملكية مرصعة بالنجوم مع أطر وتفاصيل ذهبية براقة',
+    colors: {
+      primary: '#D4AF37',
+      secondary: '#141E30',
+      accent: '#F3E5AB',
+      text: '#E0E6ED',
+      bg: '#0B1320',
+    },
+    previewImage: '/images/gallery/gallery-6.jpg',
+    sections: ['cover', 'couple', 'family', 'date', 'countdown', 'schedule', 'gallery', 'location', 'rsvp', 'messages', 'qrcode'],
+    active: true,
+  },
+  {
+    id: 'crimson-velvet',
+    name: 'العقيق الخمري الفاخر',
+    nameEn: 'Crimson Velvet',
+    category: 'فاخر',
+    description: 'فخامة اللون الخمري الملكي والكرز المخملي مع الأختام والزخارف الذهبية',
+    colors: {
+      primary: '#540D1D',
+      secondary: '#FCF8F5',
+      accent: '#C9A96E',
+      text: '#380B14',
+      bg: '#FCF8F5',
+    },
+    previewImage: '/images/gallery/gallery-2.jpg',
     sections: ['cover', 'couple', 'family', 'date', 'countdown', 'schedule', 'gallery', 'location', 'rsvp', 'messages', 'qrcode'],
     active: true,
   },
@@ -76,7 +144,7 @@ export function getTemplates() {
 }
 
 export function getTemplateById(id) {
-  return TEMPLATES.find(t => t.id === id);
+  return TEMPLATES.find(t => t.id === id) || TEMPLATES[0];
 }
 
 export function getTemplateCategories() {

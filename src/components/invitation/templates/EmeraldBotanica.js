@@ -1,0 +1,302 @@
+'use client';
+import { useState } from 'react';
+import {
+  CountdownText,
+  WeddingCalendar,
+  ConnectedTimeline,
+  PhotoAlbumStack,
+  GuestbookSection,
+  startGuidedTour
+} from '@/components/invitation/sections/SharedElements';
+import { QRCodeSVG } from 'qrcode.react';
+
+export default function EmeraldBotanica({ weddingData = {}, slug = '', isPreview = false }) {
+  const [opened, setOpened] = useState(false);
+  const [opening, setOpening] = useState(false);
+
+  const {
+    groomName = 'يوسف',
+    groomFullName = 'يوسف بن إبراهيم',
+    brideName = 'دانة',
+    brideFullName = 'دانة بنت خليفة',
+    groomFather = 'إبراهيم الحمادي',
+    groomMother = 'موزة المرزوقي',
+    brideFather = 'خليفة الشامسي',
+    brideMother = 'عائشة النعيمي',
+    weddingDate = '2027-04-17',
+    weddingTime = '19:30',
+    venue = 'قاعة الأندلس - قاعات النعمان',
+    venueAddress = 'عمّان - شارع المدينة المنوّرة',
+    mapUrl = 'https://maps.google.com/?q=31.9539,35.9106',
+    invitationMessage = 'بين سحر الطبيعة وجمال المحبة، يسعدنا دعوتكم لمشاركتنا فرحة العمر في أمسية استثنائية.',
+    photos = [
+      '/images/gallery/gallery-7.jpg',
+      '/images/gallery/gallery-4.jpg',
+      '/images/gallery/gallery-6.jpg',
+      '/images/gallery/gallery-2.jpg'
+    ],
+    schedule = [
+      { name: 'استقبال الضيوف', time: '17:30' },
+      { name: 'مراسم الزفة والترحيب', time: '18:30' },
+      { name: 'نخب وقطع الكعكة', time: '18:45' },
+      { name: 'وليمة العشاء الفاخرة', time: '19:00' },
+      { name: 'ختام الحفل المبارك', time: '21:00' },
+    ],
+  } = weddingData;
+
+  const emerald = '#1B4D3E';
+  const sage = '#87A99C';
+  const gold = '#C9A96E';
+  const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+
+  const handleOpenInvitation = () => {
+    setOpening(true);
+    setTimeout(() => {
+      setOpened(true);
+      setOpening(false);
+      if (!isPreview) {
+        startGuidedTour();
+      }
+    }, 600);
+  };
+
+  return (
+    <div style={{
+      background: '#F6F9F7',
+      color: '#1B3B30',
+      minHeight: '100%',
+      fontFamily: 'var(--font-body)',
+      direction: 'rtl',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Audio Icon */}
+      <div style={{
+        position: 'fixed',
+        bottom: 24,
+        right: 24,
+        width: 44,
+        height: 44,
+        borderRadius: '50%',
+        background: `linear-gradient(135deg, ${emerald}, ${sage})`,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: '#FFFFFF',
+        boxShadow: '0 4px 15px rgba(27,77,62,0.3)',
+        zIndex: 50,
+        cursor: 'pointer'
+      }}>
+        <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 16 }}>
+          <span style={{ width: 3, height: 12, background: '#fff', borderRadius: 2 }} />
+          <span style={{ width: 3, height: 16, background: '#fff', borderRadius: 2 }} />
+          <span style={{ width: 3, height: 8, background: '#fff', borderRadius: 2 }} />
+        </div>
+      </div>
+
+      {/* Botanical Cover */}
+      {!opened && (
+        <div style={{
+          minHeight: isPreview ? '650px' : '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          textAlign: 'center',
+          padding: 'var(--space-8)',
+          background: 'linear-gradient(180deg, #EDF4F0 0%, #DFECE5 100%)',
+          border: `10px solid ${emerald}22`,
+          position: 'relative',
+          transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
+          opacity: opening ? 0 : 1
+        }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>🌿</div>
+
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.95)',
+            border: `1.5px solid ${sage}`,
+            borderRadius: 'var(--radius-2xl)',
+            padding: 'var(--space-8) var(--space-6)',
+            maxWidth: 340,
+            width: '100%',
+            boxShadow: '0 15px 35px rgba(27,77,62,0.08)'
+          }}>
+            <span style={{ fontSize: '0.8rem', color: emerald, letterSpacing: '3px', display: 'block', marginBottom: 'var(--space-2)' }}>
+              EMERALD BOTANICAL WEDDING
+            </span>
+
+            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.6rem', color: emerald, margin: '0 0 var(--space-2) 0' }}>
+              {groomName}
+            </h1>
+            <span style={{ color: gold, fontSize: '1.2rem', display: 'block' }}>&</span>
+            <h1 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.6rem', color: emerald, margin: '0 0 var(--space-4) 0' }}>
+              {brideName}
+            </h1>
+
+            <div style={{ height: 2, width: 60, background: gold, margin: '0 auto var(--space-4)' }} />
+
+            {weddingDate && (
+              <p style={{ color: '#4A6B5D', fontSize: '0.9rem', marginBottom: 'var(--space-6)' }}>
+                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+              </p>
+            )}
+
+            <button
+              onClick={handleOpenInvitation}
+              className="btn btn-primary"
+              style={{
+                padding: '0.8rem 2.2rem',
+                borderRadius: '30px',
+                fontSize: '1.05rem',
+                background: `linear-gradient(135deg, ${emerald}, #2D6A56)`,
+                borderColor: gold,
+                color: '#FFFFFF',
+                boxShadow: '0 8px 25px rgba(27,77,62,0.3)',
+                width: '100%',
+                cursor: 'pointer'
+              }}
+            >
+              فتح بطاقة الدعوة 🍃
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Main Content */}
+      {opened && (
+        <div style={{ animation: 'slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+          <div style={{ textAlign: 'center', padding: 'var(--space-6) var(--space-4)', borderBottom: `1px solid ${sage}44`, background: '#FFFFFF' }}>
+            <img src="/images/logo.png" alt="قاعات النعمان" style={{ height: 36, margin: '0 auto var(--space-1)' }} />
+            <span style={{ fontSize: '0.75rem', color: emerald, fontWeight: 'bold' }}>قاعات النعمان — Al Numan Halls</span>
+          </div>
+
+          <div style={{ padding: 'var(--space-8) var(--space-4)' }}>
+            <div style={{
+              maxWidth: 440,
+              margin: '0 auto',
+              background: '#FFFFFF',
+              border: `2px solid ${sage}`,
+              borderRadius: 'var(--radius-2xl)',
+              padding: 'var(--space-8) var(--space-6)',
+              boxShadow: '0 10px 30px rgba(27,77,62,0.06)',
+              textAlign: 'center'
+            }}>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', color: emerald, marginBottom: 'var(--space-6)' }}>
+                معلومات الحفل
+              </h3>
+
+              {(groomFather || brideFather) && (
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  marginBottom: 'var(--space-6)',
+                  paddingBottom: 'var(--space-4)',
+                  borderBottom: `1px solid ${sage}33`,
+                  fontSize: '0.85rem'
+                }}>
+                  {brideFather && (
+                    <div style={{ flex: 1, textAlign: 'right' }}>
+                      <span style={{ display: 'block', color: '#666', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
+                      <strong style={{ color: emerald, display: 'block' }}>{brideFather}</strong>
+                      {brideMother && <span style={{ color: '#4A6B5D', fontSize: '0.8rem' }}>{brideMother}</span>}
+                    </div>
+                  )}
+                  <div style={{ width: 1, background: `${sage}44`, margin: '0 var(--space-3)' }} />
+                  {groomFather && (
+                    <div style={{ flex: 1, textAlign: 'left' }}>
+                      <span style={{ display: 'block', color: '#666', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
+                      <strong style={{ color: emerald, display: 'block' }}>{groomFather}</strong>
+                      {groomMother && <span style={{ color: '#4A6B5D', fontSize: '0.8rem' }}>{groomMother}</span>}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <p style={{ fontSize: '0.95rem', lineHeight: 2, color: '#3A5248', margin: '0 0 var(--space-6) 0', whiteSpace: 'pre-line' }}>
+                {invitationMessage}
+              </p>
+
+              <div style={{ margin: 'var(--space-6) 0' }}>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: emerald, margin: 0 }}>
+                  {groomFullName || groomName}
+                </h2>
+                <div style={{ color: gold, fontSize: '1.3rem', margin: '0.2rem 0' }}>🌿</div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: emerald, margin: 0 }}>
+                  {brideFullName || brideName}
+                </h2>
+              </div>
+
+              {weddingDate && (
+                <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${sage}33` }}>
+                  <div style={{ fontSize: '0.85rem', color: '#666' }}>حفل الزفاف في</div>
+                  <div style={{ fontSize: '1rem', fontWeight: 'bold', color: emerald, marginTop: 2 }}>
+                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 'var(--space-3)',
+                    marginTop: 'var(--space-2)'
+                  }}>
+                    <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: emerald, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
+                      {new Date(weddingDate).getDate()}
+                    </div>
+                    <div style={{ textAlign: 'right', borderRight: `2px solid ${sage}`, paddingRight: 'var(--space-2)' }}>
+                      <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#1B3B30' }}>
+                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                      </div>
+                      <div style={{ color: '#666', fontSize: '0.9rem' }}>
+                        {new Date(weddingDate).getFullYear()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {weddingDate && <CountdownText targetDate={`${weddingDate}T${weddingTime || '19:30'}`} primaryColor={emerald} />}
+
+          {weddingDate && <WeddingCalendar weddingDate={weddingDate} primaryColor={emerald} />}
+
+          {photos && photos.length > 0 && <PhotoAlbumStack photos={photos} primaryColor={emerald} />}
+
+          {schedule && schedule.length > 0 && (
+            <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', borderTop: `1px solid ${sage}33`, borderBottom: `1px solid ${sage}33` }}>
+              <h3 style={{ textAlign: 'center', color: emerald, fontFamily: 'var(--font-heading)', fontSize: '1.5rem', marginBottom: 'var(--space-4)' }}>
+                برنامج اليوم
+              </h3>
+              <ConnectedTimeline schedule={schedule} primaryColor={emerald} />
+            </div>
+          )}
+
+          <div style={{ background: '#EEF5F1', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${sage}33`, borderBottom: `1px solid ${sage}33` }}>
+            <div style={{ fontSize: '2rem', color: emerald, marginBottom: 'var(--space-2)' }}>📍</div>
+            <h3 style={{ color: emerald, fontSize: '1.3rem', marginBottom: 'var(--space-1)' }}>
+              {venue || 'قاعات النعمان'}
+            </h3>
+            <p style={{ color: '#4A6B5D', fontSize: '0.9rem', marginBottom: 'var(--space-4)' }}>
+              {venueAddress || 'عمّان - الأردن'}
+            </p>
+            {mapUrl && (
+              <a href={mapUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary btn-sm" style={{ borderRadius: '25px', borderColor: emerald, color: emerald, background: '#FFF' }}>
+                🗺️ خريطة الموقع عبر Google Maps
+              </a>
+            )}
+          </div>
+
+          <GuestbookSection slug={slug} primaryColor={emerald} />
+
+          <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${sage}33` }}>
+            <div style={{ display: 'inline-block', padding: 12, background: '#F6F9F7', borderRadius: '12px', border: `1px solid ${sage}44` }}>
+              <QRCodeSVG value={currentUrl} size={140} fgColor="#1B4D3E" />
+            </div>
+            <div style={{ marginTop: 'var(--space-4)', fontSize: '0.75rem', color: emerald }}>قاعات النعمان — Al Numan Halls</div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

@@ -1,12 +1,20 @@
 'use client';
 import ClassicGold from '@/components/invitation/templates/ClassicGold';
 import RoyalLuxury from '@/components/invitation/templates/RoyalLuxury';
+import EmeraldBotanica from '@/components/invitation/templates/EmeraldBotanica';
+import BlushRomance from '@/components/invitation/templates/BlushRomance';
+import MidnightRoyale from '@/components/invitation/templates/MidnightRoyale';
+import CrimsonVelvet from '@/components/invitation/templates/CrimsonVelvet';
 import SoftMinimal from '@/components/invitation/templates/SoftMinimal';
 import TraditionalArabic from '@/components/invitation/templates/TraditionalArabic';
 
 const TEMPLATE_COMPONENTS = {
   'classic-gold': ClassicGold,
   'royal-luxury': RoyalLuxury,
+  'emerald-botanica': EmeraldBotanica,
+  'blush-romance': BlushRomance,
+  'midnight-royale': MidnightRoyale,
+  'crimson-velvet': CrimsonVelvet,
   'soft-minimal': SoftMinimal,
   'traditional-arabic': TraditionalArabic,
 };
