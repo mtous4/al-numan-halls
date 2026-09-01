@@ -7,6 +7,7 @@ import { AuthProvider, useAuth } from '@/context/AuthContext';
 import { getTemplates, getTemplateCategories } from '@/lib/templates';
 import { getInvitationByCustomerId, changeTemplate } from '@/lib/data';
 import InvitationRenderer from '@/components/invitation/InvitationRenderer';
+import TemplateCoverArtwork from '@/components/invitation/TemplateCoverArtwork';
 
 function TemplatesContent() {
   const { user, isCustomer, isAuthenticated, loading } = useAuth();
@@ -116,44 +117,19 @@ function TemplatesContent() {
                   key={tmpl.id}
                   className={`template-card ${isCurrent ? 'selected' : ''}`}
                 >
-                  <div style={{
-                    height: 380,
-                    background: tmpl.colors.bg,
-                    color: tmpl.colors.text,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: 'var(--space-6)',
-                    textAlign: 'center',
-                    borderBottom: `3px solid ${tmpl.colors.primary}`,
-                    position: 'relative'
-                  }}>
+                  <div style={{ position: 'relative', overflow: 'hidden', borderBottom: `3px solid ${tmpl.colors.primary}` }}>
+                    <TemplateCoverArtwork templateId={tmpl.id} height={380} />
                     {isCurrent && (
                       <span
                         className="badge badge-success"
-                        style={{ position: 'absolute', top: 12, right: 12, fontWeight: 'bold' }}
+                        style={{ position: 'absolute', top: 12, right: 12, fontWeight: 'bold', zIndex: 10 }}
                       >
                         ✓ القالب الحالي
                       </span>
                     )}
-                    <span className="badge badge-gold" style={{ position: 'absolute', top: 12, left: 12 }}>
+                    <span className="badge badge-gold" style={{ position: 'absolute', top: 12, left: 12, zIndex: 10 }}>
                       {tmpl.category}
                     </span>
-
-                    <div style={{ fontSize: '2.5rem', color: tmpl.colors.primary, marginBottom: 'var(--space-2)' }}>✦</div>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', color: tmpl.colors.primary, marginBottom: 'var(--space-2)' }}>
-                      {tmpl.name}
-                    </h3>
-                    <p style={{ fontSize: '0.85rem', opacity: 0.85, maxWidth: 220, margin: '0 0 var(--space-4) 0' }}>
-                      {tmpl.description}
-                    </p>
-
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <div style={{ width: 18, height: 18, borderRadius: '50%', background: tmpl.colors.primary, border: '1px solid #fff' }} />
-                      <div style={{ width: 18, height: 18, borderRadius: '50%', background: tmpl.colors.accent, border: '1px solid #fff' }} />
-                      <div style={{ width: 18, height: 18, borderRadius: '50%', background: tmpl.colors.bg, border: '1px solid #bbb' }} />
-                    </div>
                   </div>
 
                   <div className="template-card-body">

@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { AuthProvider } from '@/context/AuthContext';
 import { TEMPLATES } from '@/lib/templates';
+import TemplateCoverArtwork from '@/components/invitation/TemplateCoverArtwork';
 
 function InvitationsLandingContent() {
   const steps = [
@@ -98,32 +99,11 @@ function InvitationsLandingContent() {
           <div className="grid grid-4" style={{ gap: 'var(--space-6)' }}>
             {TEMPLATES.map((tmpl) => (
               <div key={tmpl.id} className="template-card" style={{ background: 'var(--white)' }}>
-                <div style={{
-                  height: 380,
-                  background: tmpl.colors.bg,
-                  borderBottom: `3px solid ${tmpl.colors.primary}`,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: 'var(--space-6)',
-                  textAlign: 'center',
-                  color: tmpl.colors.text,
-                  position: 'relative'
-                }}>
-                  <span className="badge badge-gold" style={{ position: 'absolute', top: 12, right: 12 }}>{tmpl.category}</span>
-                  <div style={{ fontSize: '2.5rem', color: tmpl.colors.primary, marginBottom: 'var(--space-2)' }}>✦</div>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', color: tmpl.colors.primary, marginBottom: 'var(--space-2)' }}>
-                    {tmpl.name}
-                  </h3>
-                  <p style={{ fontSize: '0.85rem', opacity: 0.8, maxWidth: 200, margin: 0 }}>
-                    {tmpl.description}
-                  </p>
-                  <div style={{ display: 'flex', gap: 6, marginTop: 'var(--space-4)' }}>
-                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: tmpl.colors.primary, border: '1px solid #fff' }} />
-                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: tmpl.colors.accent, border: '1px solid #fff' }} />
-                    <div style={{ width: 18, height: 18, borderRadius: '50%', background: tmpl.colors.bg, border: '1px solid #ccc' }} />
-                  </div>
+                <div style={{ position: 'relative', overflow: 'hidden', borderBottom: `3px solid ${tmpl.colors.primary}` }}>
+                  <TemplateCoverArtwork templateId={tmpl.id} height={380} />
+                  <span className="badge badge-gold" style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}>
+                    {tmpl.category}
+                  </span>
                 </div>
                 <div style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
                   <Link href="/login" className="btn btn-primary btn-sm" style={{ width: '100%' }}>
