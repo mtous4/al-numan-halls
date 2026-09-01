@@ -494,19 +494,17 @@ export function PhotoAlbumStack({ photos, primaryColor = '#B8944F' }) {
 // ========== Mobile & Modal Guaranteed Cinematic Guided Tour ==========
 let isTourRunning = false;
 let tourAnimationId = null;
-let tourListenersAttached = false;
-const tourStateListeners = new Set();
-
-function notifyTourState(running) {
-  isTourRunning = running;
-  tourStateListeners.forEach(cb => cb(running));
-}
+let cleanupInterruptListeners = null;
 
 export function stopGuidedTour() {
-  notifyTourState(false);
+  isTourRunning = false;
   if (tourAnimationId) {
     cancelAnimationFrame(tourAnimationId);
     tourAnimationId = null;
+  }
+  if (cleanupInterruptListeners) {
+    cleanupInterruptListeners();
+    cleanupInterruptListeners = null;
   }
 }
 
@@ -518,9 +516,11 @@ export function startGuidedTour() {
   if (typeof window === 'undefined') return;
 
   stopGuidedTour();
-  notifyTourState(true);
+  isTourRunning = true;
 
   setTimeout(() => {
+    if (!isTourRunning) return;
+
     // Locate scrollable target: modal container or window
     const getScrollTargets = () => {
       const targets = [];
@@ -536,25 +536,37 @@ export function startGuidedTour() {
     };
 
     const scrollTargets = getScrollTargets();
-    const speed = 1.35; // Butter-smooth cinematic speed
+    const speed = 1.35; // Smooth cinematic speed
 
-    // Optional cancel listener on strong user touch (after grace period)
-    if (!tourListenersAttached) {
-      const onUserInterrupt = (e) => {
-        // Don't cancel if clicking floating controls
-        if (e.target && e.target.closest && e.target.closest('[data-tour-control]')) return;
-        // Don't cancel immediately on first touch after opening
-      };
+    // Instant interruption handler: user touching, swiping, or scrolling immediately stops the tour
+    const onUserInterrupt = (e) => {
+      stopGuidedTour();
+    };
+
+    // Attach after short grace period so opening tap isn't registered as interruption
+    const timer = setTimeout(() => {
+      window.addEventListener('touchstart', onUserInterrupt, { passive: true });
+      window.addEventListener('touchmove', onUserInterrupt, { passive: true });
       window.addEventListener('wheel', onUserInterrupt, { passive: true });
-      tourListenersAttached = true;
-    }
+      window.addEventListener('mousedown', onUserInterrupt, { passive: true });
+      window.addEventListener('pointerdown', onUserInterrupt, { passive: true });
+    }, 600);
+
+    cleanupInterruptListeners = () => {
+      clearTimeout(timer);
+      window.removeEventListener('touchstart', onUserInterrupt);
+      window.removeEventListener('touchmove', onUserInterrupt);
+      window.removeEventListener('wheel', onUserInterrupt);
+      window.removeEventListener('mousedown', onUserInterrupt);
+      window.removeEventListener('pointerdown', onUserInterrupt);
+    };
 
     const scrollLoop = () => {
       if (!isTourRunning) return;
 
       let hasMoreToScroll = false;
 
-      // 1. Scroll any active modal container
+      // 1. Scroll active modal container if present
       if (scrollTargets.length > 0) {
         scrollTargets.forEach(target => {
           const max = target.scrollHeight - target.clientHeight - 8;
@@ -565,7 +577,7 @@ export function startGuidedTour() {
         });
       }
 
-      // 2. Scroll whole window / document (for mobile direct links and full page)
+      // 2. Scroll whole window / document
       const docHeight = Math.max(
         document.body.scrollHeight,
         document.documentElement.scrollHeight,
@@ -584,7 +596,7 @@ export function startGuidedTour() {
         hasMoreToScroll = true;
       }
 
-      if (hasMoreToScroll) {
+      if (hasMoreToScroll && isTourRunning) {
         tourAnimationId = requestAnimationFrame(scrollLoop);
       } else {
         stopGuidedTour();
