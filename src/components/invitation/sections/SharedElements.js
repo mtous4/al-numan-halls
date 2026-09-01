@@ -790,97 +790,42 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
   );
 }
 
-// ========== Floating Luxury Controls Dock (Audio + Mobile Auto-Tour) ==========
+// ========== Floating Luxury Music Button with Live Equalizer ==========
 export function FloatingAudioButton({ primaryColor = '#C9A96E', isPlaying = false, onToggle }) {
-  const [tourActive, setTourActive] = useState(false);
-
-  useEffect(() => {
-    const listener = (active) => setTourActive(active);
-    tourStateListeners.add(listener);
-    return () => {
-      tourStateListeners.delete(listener);
-    };
-  }, []);
-
-  const handleToggleTour = (e) => {
-    e.stopPropagation();
-    if (tourActive) {
-      stopGuidedTour();
-    } else {
-      startGuidedTour();
-    }
-  };
-
   return (
     <div
-      data-tour-control="true"
+      onClick={onToggle}
+      title={isPlaying ? 'إيقاف اللحن الرومانسي' : 'تشغيل اللحن الرومانسي'}
       style={{
         position: 'fixed',
         bottom: 24,
         right: 20,
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+        background: `linear-gradient(135deg, ${primaryColor}, #1F1B16)`,
         display: 'flex',
         alignItems: 'center',
-        gap: 10,
+        justifyContent: 'center',
+        color: '#FFFFFF',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
+        border: '2px solid rgba(255,255,255,0.4)',
         zIndex: 9999,
-        direction: 'rtl'
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease, box-shadow 0.2s ease'
       }}
+      onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+      onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
     >
-      {/* Auto Tour Toggle Button */}
-      <button
-        type="button"
-        onClick={handleToggleTour}
-        style={{
-          background: tourActive ? `linear-gradient(135deg, ${primaryColor}, #8B7340)` : 'rgba(20, 20, 25, 0.88)',
-          border: `1.5px solid ${primaryColor}88`,
-          borderRadius: 30,
-          padding: '8px 14px',
-          color: '#FFFFFF',
-          fontSize: '0.85rem',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 6,
-          cursor: 'pointer',
-          boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
-          backdropFilter: 'blur(8px)',
-          transition: 'all 0.25s ease'
-        }}
-      >
-        <span style={{ fontSize: '1rem' }}>{tourActive ? '⏸️' : '🎬'}</span>
-        <span style={{ fontWeight: '500' }}>{tourActive ? 'إيقاف الجولة' : 'جولة تلقائية'}</span>
-      </button>
-
-      {/* Music Equalizer Button */}
-      <div
-        onClick={onToggle}
-        title={isPlaying ? 'إيقاف اللحن الرومانسي' : 'تشغيل اللحن الرومانسي'}
-        style={{
-          width: 48,
-          height: 48,
-          borderRadius: '50%',
-          background: `linear-gradient(135deg, ${primaryColor}, #1F1B16)`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#FFFFFF',
-          boxShadow: '0 6px 20px rgba(0,0,0,0.35)',
-          border: '2px solid rgba(255,255,255,0.4)',
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        {isPlaying ? (
-          <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 18 }}>
-            <span style={{ width: 3.5, height: 14, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.8s ease-in-out infinite alternate' }} />
-            <span style={{ width: 3.5, height: 18, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.6s ease-in-out 0.2s infinite alternate' }} />
-            <span style={{ width: 3.5, height: 10, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.7s ease-in-out 0.4s infinite alternate' }} />
-          </div>
-        ) : (
-          <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>🔇</span>
-        )}
-      </div>
-
+      {isPlaying ? (
+        <div style={{ display: 'flex', gap: 3, alignItems: 'flex-end', height: 18 }}>
+          <span style={{ width: 3.5, height: 14, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.8s ease-in-out infinite alternate' }} />
+          <span style={{ width: 3.5, height: 18, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.6s ease-in-out 0.2s infinite alternate' }} />
+          <span style={{ width: 3.5, height: 10, background: '#FFFFFF', borderRadius: 2, animation: 'equalizer 0.7s ease-in-out 0.4s infinite alternate' }} />
+        </div>
+      ) : (
+        <span style={{ fontSize: '1.2rem', lineHeight: 1 }}>🔇</span>
+      )}
       <style jsx global>{`
         @keyframes equalizer {
           0% { height: 4px; }
