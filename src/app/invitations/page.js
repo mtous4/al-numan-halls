@@ -1,12 +1,15 @@
 'use client';
+import { useState } from 'react';
 import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { AuthProvider } from '@/context/AuthContext';
 import { TEMPLATES } from '@/lib/templates';
-import TemplateCoverArtwork from '@/components/invitation/TemplateCoverArtwork';
+import InvitationRenderer from '@/components/invitation/InvitationRenderer';
 
 function InvitationsLandingContent() {
+  const [previewTemplate, setPreviewTemplate] = useState(null);
+
   const steps = [
     { step: 1, title: 'استلام الحساب', desc: 'تزويدك ببيانات تسجيل الدخول الخاصة بك من إدارة قاعات النعمان' },
     { step: 2, title: 'اختيار القالب', desc: 'تصفح تشكيلة قوالبنا الملكية والعصرية المتنوعة لاختيار ما يناسب ذوقك' },
@@ -98,16 +101,71 @@ function InvitationsLandingContent() {
 
           <div className="grid grid-4" style={{ gap: 'var(--space-6)' }}>
             {TEMPLATES.map((tmpl) => (
-              <div key={tmpl.id} className="template-card" style={{ background: 'var(--white)' }}>
-                <div style={{ position: 'relative', overflow: 'hidden', borderBottom: `3px solid ${tmpl.colors.primary}` }}>
-                  <TemplateCoverArtwork templateId={tmpl.id} height={380} />
-                  <span className="badge badge-gold" style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}>
+              <div
+                key={tmpl.id}
+                className="template-card"
+                style={{
+                  background: '#FFFFFF',
+                  borderRadius: 'var(--radius-xl)',
+                  overflow: 'hidden',
+                  border: '1px solid #EBE5DB',
+                  boxShadow: '0 8px 25px rgba(0,0,0,0.05)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease'
+                }}
+              >
+                <div
+                  style={{ position: 'relative', height: 420, overflow: 'hidden', cursor: 'pointer' }}
+                  onClick={() => setPreviewTemplate(tmpl)}
+                >
+                  <img
+                    src={tmpl.previewImage}
+                    alt={tmpl.name}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      transition: 'transform 0.5s ease'
+                    }}
+                    className="gallery-hover-img"
+                  />
+
+                  {/* Gradient Overlay with Title */}
+                  <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(20, 18, 15, 0.85) 0%, rgba(20, 18, 15, 0.2) 50%, transparent 80%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    padding: 'var(--space-5)'
+                  }}>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', color: '#FFFFFF', fontSize: '1.4rem', margin: '0 0 4px 0' }}>
+                      {tmpl.name}
+                    </h3>
+                    <p style={{ color: '#E8DECC', fontSize: '0.8rem', lineHeight: 1.5, margin: 0 }}>
+                      {tmpl.description}
+                    </p>
+                  </div>
+
+                  <span className="badge badge-gold" style={{ position: 'absolute', top: 12, left: 12, zIndex: 10, boxShadow: '0 4px 10px rgba(0,0,0,0.3)' }}>
                     {tmpl.category}
                   </span>
                 </div>
-                <div style={{ padding: 'var(--space-4)', textAlign: 'center' }}>
-                  <Link href="/login" className="btn btn-primary btn-sm" style={{ width: '100%' }}>
-                    استخدم هذا القالب
+
+                <div style={{ padding: 'var(--space-4)', display: 'flex', gap: 'var(--space-2)' }}>
+                  <button
+                    onClick={() => setPreviewTemplate(tmpl)}
+                    className="btn btn-secondary btn-sm"
+                    style={{ flex: 1, borderRadius: '20px' }}
+                  >
+                    👁️ معاينة
+                  </button>
+                  <Link
+                    href="/login"
+                    className="btn btn-primary btn-sm"
+                    style={{ flex: 1, borderRadius: '20px', textAlign: 'center' }}
+                  >
+                    استخدم القالب
                   </Link>
                 </div>
               </div>
@@ -168,6 +226,100 @@ function InvitationsLandingContent() {
           </div>
         </div>
       </section>
+
+      {/* Live Template Preview Modal */}
+      {previewTemplate && (
+        <div className="modal-overlay" onClick={() => setPreviewTemplate(null)} style={{ background: 'rgba(0,0,0,0.85)' }}>
+          <div
+            className="modal-content"
+            style={{ maxWidth: 480, maxHeight: '92vh', padding: 0, overflow: 'hidden', background: '#FFFFFF', borderRadius: 'var(--radius-2xl)', border: '2px solid #C9A96E' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: 'var(--space-4) var(--space-6)',
+              borderBottom: '1px solid var(--warm-gray-200)',
+              background: '#FAFAF7'
+            }}>
+              <div>
+                <h4 style={{ margin: 0, fontFamily: 'var(--font-heading)', color: 'var(--dark-brown)' }}>
+                  معاينة حية: {previewTemplate.name}
+                </h4>
+                <span className="text-xs text-muted">اضغط "فتح الدعوة" لتجربة الجولة التلقائية والألبوم التفاعلي</span>
+              </div>
+              <button
+                onClick={() => setPreviewTemplate(null)}
+                style={{ background: 'none', border: 'none', fontSize: '1.4rem', cursor: 'pointer', color: 'var(--dark-brown)' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ height: '70vh', overflowY: 'auto' }}>
+              <InvitationRenderer
+                templateId={previewTemplate.id}
+                weddingData={{
+                  groomName: 'يوسف',
+                  groomFullName: 'يوسف بن إبراهيم المبارك',
+                  brideName: 'دانة',
+                  brideFullName: 'دانة بنت خليفة الشامسي',
+                  groomFather: 'إبراهيم المبارك',
+                  groomMother: 'موزة المرزوقي',
+                  brideFather: 'خليفة الشامسي',
+                  brideMother: 'عائشة النعيمي',
+                  weddingDate: '2027-04-17',
+                  weddingTime: '19:30',
+                  venue: 'قاعة الملكية - قاعات النعمان',
+                  venueAddress: 'عمّان، شارع المدينة المنوّرة',
+                  mapUrl: 'https://maps.google.com/?q=31.9539,35.9106',
+                  invitationMessage: 'يتشرف يوسف ودانة بدعوتكم لمشاركتهما فرحة العمر في ليلة تكتمل بحضوركم الكريم.',
+                  photos: [
+                    '/images/gallery/gallery-6.jpg',
+                    '/images/gallery/gallery-2.jpg',
+                    '/images/gallery/gallery-7.jpg',
+                    '/images/gallery/gallery-3.jpg'
+                  ],
+                  schedule: [
+                    { name: 'استقبال المهنئين', time: '17:30' },
+                    { name: 'الزفة الملكية', time: '18:30' },
+                    { name: 'نخب وقطع الكعكة', time: '18:45' },
+                    { name: 'العشاء الرئيسي', time: '19:00' },
+                    { name: 'ختام الحفل', time: '21:00' },
+                  ]
+                }}
+                slug="preview"
+                isPreview={true}
+              />
+            </div>
+
+            <div style={{
+              padding: 'var(--space-4) var(--space-6)',
+              borderTop: '1px solid var(--warm-gray-200)',
+              display: 'flex',
+              gap: 'var(--space-3)',
+              justifyContent: 'flex-end',
+              background: '#FAFAF7'
+            }}>
+              <button
+                onClick={() => setPreviewTemplate(null)}
+                className="btn btn-secondary btn-sm"
+                style={{ borderRadius: '20px' }}
+              >
+                إغلاق
+              </button>
+              <Link
+                href="/login"
+                className="btn btn-primary btn-sm"
+                style={{ borderRadius: '20px' }}
+              >
+                استخدم هذا القالب ✨
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </>
   );
