@@ -130,11 +130,9 @@ function DashboardContent() {
                       <span style={{ display: 'block', fontSize: 'var(--text-lg)', color: 'var(--gold-light)' }}>&</span>
                       {wd.brideName}
                     </p>
-                    {wd.weddingDate && (
                       <p style={{ color: 'var(--warm-gray-500)', marginTop: 'var(--space-2)', margin: 'var(--space-2) 0 0' }}>
-                        {new Date(wd.weddingDate).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' })}
+                        {new Date(wd.weddingDate).toLocaleDateString('ar-JO-u-ca-gregory', { year: 'numeric', month: 'long', day: 'numeric' })}
                       </p>
-                    )}
                   </div>
                 ) : (
                   <div style={{ textAlign: 'center', padding: 'var(--space-8)', background: 'var(--cream)', borderRadius: 'var(--radius-lg)', marginBottom: 'var(--space-4)' }}>

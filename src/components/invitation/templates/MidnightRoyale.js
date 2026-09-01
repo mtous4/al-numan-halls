@@ -7,6 +7,8 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  LuxuryMonogramSeal,
+  formatArabicDate,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
@@ -68,6 +70,7 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
   const gold = '#D4AF37';
   const goldLight = '#F3E5AB';
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+  const dateInfo = formatArabicDate(weddingDate);
 
   const handleOpenInvitation = () => {
     playEnvelopeOpenSound();
@@ -119,7 +122,13 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>👑</div>
+          {/* Luxury Monogram Wax Seal */}
+          <LuxuryMonogramSeal
+            primaryColor={gold}
+            groomName={groomName}
+            brideName={brideName}
+            size={72}
+          />
 
           <div style={{
             background: 'rgba(20, 30, 48, 0.95)',
@@ -146,7 +155,7 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
 
             {weddingDate && (
               <p style={{ color: goldLight, fontSize: '0.9rem', marginBottom: 'var(--space-6)' }}>
-                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {dateInfo.fullDate}
               </p>
             )}
 
@@ -240,7 +249,7 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${gold}33` }}>
                   <div style={{ fontSize: '0.85rem', color: '#8E9BAE' }}>حفل الزفاف في</div>
                   <div style={{ fontSize: '1rem', fontWeight: 'bold', color: gold, marginTop: 2 }}>
-                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                    {dateInfo.weekday} في {weddingTime || '19:30'}
                   </div>
                   <div style={{
                     display: 'flex',
@@ -250,14 +259,14 @@ export default function MidnightRoyale({ weddingData = {}, slug = '', isPreview 
                     marginTop: 'var(--space-2)'
                   }}>
                     <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: gold, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
-                      {new Date(weddingDate).getDate()}
+                      {dateInfo.day}
                     </div>
                     <div style={{ textAlign: 'right', borderRight: `2px solid ${gold}`, paddingRight: 'var(--space-2)' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#FFFFFF' }}>
-                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                        {dateInfo.monthName}
                       </div>
                       <div style={{ color: '#8E9BAE', fontSize: '0.9rem' }}>
-                        {new Date(weddingDate).getFullYear()}
+                        {dateInfo.year}
                       </div>
                     </div>
                   </div>

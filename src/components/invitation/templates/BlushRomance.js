@@ -7,6 +7,8 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  LuxuryMonogramSeal,
+  formatArabicDate,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
@@ -67,6 +69,7 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
   const blush = '#E8A7B3';
   const gold = '#C9A96E';
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+  const dateInfo = formatArabicDate(weddingDate);
 
   const handleOpenInvitation = () => {
     playEnvelopeOpenSound();
@@ -111,14 +114,20 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
           justifyContent: 'center',
           textAlign: 'center',
           padding: 'var(--space-8)',
-          background: 'linear-gradient(180deg, #FFF0F3 0%, #FCE4E8 100%)',
+          background: 'linear-gradient(135deg, #FFF0F3 0%, #FFE3E8 100%)',
           border: `10px solid ${blush}44`,
           position: 'relative',
           transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>🌸</div>
+          {/* Luxury Monogram Wax Seal */}
+          <LuxuryMonogramSeal
+            primaryColor={rose}
+            groomName={groomName}
+            brideName={brideName}
+            size={72}
+          />
 
           <div style={{
             background: 'rgba(255, 255, 255, 0.95)',
@@ -145,7 +154,7 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
 
             {weddingDate && (
               <p style={{ color: '#7E525E', fontSize: '0.9rem', marginBottom: 'var(--space-6)' }}>
-                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {dateInfo.fullDate}
               </p>
             )}
 
@@ -164,7 +173,7 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
                 cursor: 'pointer'
               }}
             >
-              افتح بطاقة الدعوة 🌺
+              فتح بطاقة الدعوة
             </button>
           </div>
         </div>
@@ -228,7 +237,7 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: rose, margin: 0 }}>
                   {groomFullName || groomName}
                 </h2>
-                <div style={{ color: gold, fontSize: '1.3rem', margin: '0.2rem 0' }}>🌸</div>
+                <div style={{ color: gold, fontSize: '1.2rem', margin: '0.2rem 0' }}>✦</div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: rose, margin: 0 }}>
                   {brideFullName || brideName}
                 </h2>
@@ -238,7 +247,7 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${blush}33` }}>
                   <div style={{ fontSize: '0.85rem', color: '#888' }}>حفل الزفاف في</div>
                   <div style={{ fontSize: '1rem', fontWeight: 'bold', color: rose, marginTop: 2 }}>
-                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                    {dateInfo.weekday} في {weddingTime || '19:30'}
                   </div>
                   <div style={{
                     display: 'flex',
@@ -248,14 +257,14 @@ export default function BlushRomance({ weddingData = {}, slug = '', isPreview = 
                     marginTop: 'var(--space-2)'
                   }}>
                     <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: rose, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
-                      {new Date(weddingDate).getDate()}
+                      {dateInfo.day}
                     </div>
                     <div style={{ textAlign: 'right', borderRight: `2px solid ${blush}`, paddingRight: 'var(--space-2)' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#3B242B' }}>
-                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                        {dateInfo.monthName}
                       </div>
                       <div style={{ color: '#888', fontSize: '0.9rem' }}>
-                        {new Date(weddingDate).getFullYear()}
+                        {dateInfo.year}
                       </div>
                     </div>
                   </div>

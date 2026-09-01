@@ -1,6 +1,68 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 
+// ========== Pure Gregorian Arabic Date Formatter (No Hijri) ==========
+export function formatArabicDate(dateString) {
+  if (!dateString) {
+    return { weekday: 'السبت', day: 17, monthName: 'أبريل', year: 2027, fullDate: 'السبت، 17 أبريل 2027' };
+  }
+  const d = new Date(dateString);
+  const weekdays = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+  const months = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+
+  const weekday = weekdays[d.getDay()] || 'السبت';
+  const day = d.getDate() || 17;
+  const monthName = months[d.getMonth()] || 'أبريل';
+  const year = d.getFullYear() || 2027;
+
+  return {
+    weekday,
+    day,
+    monthName,
+    year,
+    fullDate: `${weekday}، ${day} ${monthName} ${year}`
+  };
+}
+
+// ========== Luxury Gold Seal (No Emojis) ==========
+export function LuxuryMonogramSeal({ primaryColor = '#B8944F', groomName = '', brideName = '', size = 66 }) {
+  const gInitial = groomName ? groomName.trim().charAt(0) : 'ي';
+  const bInitial = brideName ? brideName.trim().charAt(0) : 'د';
+
+  return (
+    <div style={{
+      width: size,
+      height: size,
+      borderRadius: '50%',
+      background: `linear-gradient(135deg, ${primaryColor}, #8B7340)`,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#FFFFFF',
+      boxShadow: `0 8px 25px ${primaryColor}55`,
+      border: '2px solid rgba(255, 255, 255, 0.6)',
+      position: 'relative',
+      margin: '0 auto var(--space-5)'
+    }}>
+      <div style={{
+        width: size - 10,
+        height: size - 10,
+        borderRadius: '50%',
+        border: '1px dashed rgba(255,255,255,0.7)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
+        fontSize: size * 0.32,
+        fontFamily: 'var(--font-heading)',
+        letterSpacing: 1
+      }}>
+        {gInitial} & {bInitial}
+      </div>
+    </div>
+  );
+}
+
 // ========== Live Arabic Text Countdown ==========
 export function CountdownText({ targetDate, primaryColor = '#B8944F' }) {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
@@ -659,7 +721,7 @@ export function GuestbookSection({ slug, primaryColor = '#B8944F', dark = false 
                 <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: primaryColor }}>{msg.guestName}</span>
                 {msg.submittedAt && (
                   <span style={{ fontSize: '0.7rem', color: dark ? '#888' : '#999' }}>
-                    {new Date(msg.submittedAt).toLocaleDateString('ar-SA', { month: 'short', day: 'numeric' })}
+                    {formatArabicDate(msg.submittedAt).day} {formatArabicDate(msg.submittedAt).monthName}
                   </span>
                 )}
               </div>

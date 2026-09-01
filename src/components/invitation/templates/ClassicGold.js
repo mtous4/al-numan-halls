@@ -7,6 +7,8 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  LuxuryMonogramSeal,
+  formatArabicDate,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
@@ -65,6 +67,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
 
   const primaryColor = '#B8944F';
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+  const dateInfo = formatArabicDate(weddingDate);
 
   const handleOpenInvitation = () => {
     playEnvelopeOpenSound();
@@ -108,14 +111,13 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          background: 'radial-gradient(ellipse at center, #FFFFFF 0%, #F5F0E8 100%)',
+          padding: 'var(--space-6)',
           textAlign: 'center',
-          padding: 'var(--space-8)',
-          background: 'linear-gradient(180deg, #FBF8F2 0%, #F3EBDD 100%)',
-          border: '14px solid #E8DECC',
           position: 'relative',
-          transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-          transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
-          opacity: opening ? 0 : 1
+          transition: 'all 0.6s ease',
+          opacity: opening ? 0 : 1,
+          transform: opening ? 'scale(1.05)' : 'scale(1)'
         }}>
           {/* Ornaments */}
           <div style={{ position: 'absolute', top: 16, right: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
@@ -123,22 +125,13 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
           <div style={{ position: 'absolute', bottom: 16, right: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
           <div style={{ position: 'absolute', bottom: 16, left: 16, color: primaryColor, fontSize: '1.4rem' }}>✤</div>
 
-          {/* Wax Seal */}
-          <div style={{
-            width: 70,
-            height: 70,
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #B8944F, #D4AF37)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF',
-            fontSize: '1.8rem',
-            marginBottom: 'var(--space-6)',
-            boxShadow: '0 10px 25px rgba(184, 148, 79, 0.4)'
-          }}>
-            💌
-          </div>
+          {/* Luxury Monogram Wax Seal */}
+          <LuxuryMonogramSeal
+            primaryColor={primaryColor}
+            groomName={groomName}
+            brideName={brideName}
+            size={72}
+          />
 
           <div style={{
             background: 'rgba(255, 255, 255, 0.85)',
@@ -177,7 +170,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
 
             {weddingDate && (
               <p style={{ color: '#6B5F4F', fontSize: '0.9rem', marginBottom: 'var(--space-6)' }}>
-                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {dateInfo.fullDate}
               </p>
             )}
 
@@ -294,7 +287,7 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${primaryColor}22` }}>
                   <div style={{ fontSize: '0.85rem', color: '#8A7D6B' }}>حفل الزفاف في</div>
                   <div style={{ fontSize: '1rem', fontWeight: 'bold', color: '#2C2417', marginTop: 2 }}>
-                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                    {dateInfo.weekday} في {weddingTime || '19:30'}
                   </div>
                   <div style={{
                     display: 'flex',
@@ -304,14 +297,14 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
                     marginTop: 'var(--space-2)'
                   }}>
                     <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: primaryColor, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
-                      {new Date(weddingDate).getDate()}
+                      {dateInfo.day}
                     </div>
                     <div style={{ textAlign: 'right', borderRight: `2px solid ${primaryColor}44`, paddingRight: 'var(--space-2)' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#2C2417' }}>
-                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                        {dateInfo.monthName}
                       </div>
                       <div style={{ color: '#8A7D6B', fontSize: '0.9rem' }}>
-                        {new Date(weddingDate).getFullYear()}
+                        {dateInfo.year}
                       </div>
                     </div>
                   </div>

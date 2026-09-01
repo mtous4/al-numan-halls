@@ -7,6 +7,8 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  LuxuryMonogramSeal,
+  formatArabicDate,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
@@ -68,6 +70,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
   const gold = '#C9A96E';
   const goldLight = '#F0D499';
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+  const dateInfo = formatArabicDate(weddingDate);
 
   const handleOpenInvitation = () => {
     playEnvelopeOpenSound();
@@ -119,7 +122,13 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
-          <div style={{ fontSize: '2.5rem', marginBottom: 'var(--space-2)' }}>⚜️</div>
+          {/* Luxury Monogram Wax Seal */}
+          <LuxuryMonogramSeal
+            primaryColor={burgundy}
+            groomName={groomName}
+            brideName={brideName}
+            size={72}
+          />
 
           <div style={{
             background: 'rgba(255, 255, 255, 0.96)',
@@ -146,7 +155,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
 
             {weddingDate && (
               <p style={{ color: '#6A2E3B', fontSize: '0.9rem', marginBottom: 'var(--space-6)' }}>
-                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {dateInfo.fullDate}
               </p>
             )}
 
@@ -165,7 +174,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                 cursor: 'pointer'
               }}
             >
-              افتح بطاقة الدعوة ⚜️
+              فتح بطاقة الدعوة
             </button>
           </div>
         </div>
@@ -187,7 +196,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
               border: `2px solid ${gold}`,
               borderRadius: 'var(--radius-2xl)',
               padding: 'var(--space-8) var(--space-6)',
-              boxShadow: '0 10px 30px rgba(84,13,29,0.08)',
+              boxShadow: '0 10px 30px rgba(84,13,29,0.06)',
               textAlign: 'center'
             }}>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', color: burgundy, marginBottom: 'var(--space-6)' }}>
@@ -200,7 +209,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                   justifyContent: 'space-between',
                   marginBottom: 'var(--space-6)',
                   paddingBottom: 'var(--space-4)',
-                  borderBottom: `1px solid ${gold}33`,
+                  borderBottom: `1px solid ${gold}22`,
                   fontSize: '0.85rem'
                 }}>
                   {brideFather && (
@@ -210,7 +219,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                       {brideMother && <span style={{ color: '#6A2E3B', fontSize: '0.8rem' }}>{brideMother}</span>}
                     </div>
                   )}
-                  <div style={{ width: 1, background: `${gold}44`, margin: '0 var(--space-3)' }} />
+                  <div style={{ width: 1, background: `${gold}33`, margin: '0 var(--space-3)' }} />
                   {groomFather && (
                     <div style={{ flex: 1, textAlign: 'left' }}>
                       <span style={{ display: 'block', color: '#888', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
@@ -221,7 +230,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                 </div>
               )}
 
-              <p style={{ fontSize: '0.95rem', lineHeight: 2, color: '#4A1C25', margin: '0 0 var(--space-6) 0', whiteSpace: 'pre-line' }}>
+              <p style={{ fontSize: '0.95rem', lineHeight: 2, color: '#4D242D', margin: '0 0 var(--space-6) 0', whiteSpace: 'pre-line' }}>
                 {invitationMessage}
               </p>
 
@@ -229,7 +238,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: burgundy, margin: 0 }}>
                   {groomFullName || groomName}
                 </h2>
-                <div style={{ color: gold, fontSize: '1.3rem', margin: '0.2rem 0' }}>⚜️</div>
+                <div style={{ color: gold, fontSize: '1.2rem', margin: '0.2rem 0' }}>✦</div>
                 <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: burgundy, margin: 0 }}>
                   {brideFullName || brideName}
                 </h2>
@@ -239,7 +248,7 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${gold}33` }}>
                   <div style={{ fontSize: '0.85rem', color: '#888' }}>حفل الزفاف في</div>
                   <div style={{ fontSize: '1rem', fontWeight: 'bold', color: burgundy, marginTop: 2 }}>
-                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                    {dateInfo.weekday} في {weddingTime || '19:30'}
                   </div>
                   <div style={{
                     display: 'flex',
@@ -249,14 +258,14 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
                     marginTop: 'var(--space-2)'
                   }}>
                     <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: burgundy, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
-                      {new Date(weddingDate).getDate()}
+                      {dateInfo.day}
                     </div>
                     <div style={{ textAlign: 'right', borderRight: `2px solid ${gold}`, paddingRight: 'var(--space-2)' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#380B14' }}>
-                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                        {dateInfo.monthName}
                       </div>
                       <div style={{ color: '#888', fontSize: '0.9rem' }}>
-                        {new Date(weddingDate).getFullYear()}
+                        {dateInfo.year}
                       </div>
                     </div>
                   </div>

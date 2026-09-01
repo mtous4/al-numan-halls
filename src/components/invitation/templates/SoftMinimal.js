@@ -7,6 +7,8 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  LuxuryMonogramSeal,
+  formatArabicDate,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
@@ -65,6 +67,7 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
 
   const softGold = '#C9A96E';
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+  const dateInfo = formatArabicDate(weddingDate);
 
   const handleOpenInvitation = () => {
     playEnvelopeOpenSound();
@@ -109,12 +112,20 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
           justifyContent: 'center',
           textAlign: 'center',
           padding: 'var(--space-8)',
-          background: '#FAFAF7',
-          border: '1px solid #EBE5DB',
+          background: '#FAF8F5',
+          position: 'relative',
           transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
           opacity: opening ? 0 : 1
         }}>
+          {/* Luxury Monogram Wax Seal */}
+          <LuxuryMonogramSeal
+            primaryColor={softGold}
+            groomName={groomName}
+            brideName={brideName}
+            size={70}
+          />
+
           <div style={{
             background: '#FFFFFF',
             border: `1px solid ${softGold}`,
@@ -152,7 +163,7 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
 
             {weddingDate && (
               <p style={{ color: '#8A7D6B', fontSize: '0.9rem', marginBottom: 'var(--space-6)' }}>
-                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {dateInfo.fullDate}
               </p>
             )}
 
@@ -165,71 +176,40 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
                 borderColor: softGold,
                 color: '#2C2417',
                 fontSize: '0.95rem',
-                width: '100%'
+                width: '100%',
+                cursor: 'pointer'
               }}
             >
-              استعراض بطاقة الدعوة 🕊️
+              افتح الدعوة
             </button>
           </div>
         </div>
       )}
 
-      {/* Main Body */}
+      {/* Main Content */}
       {opened && (
         <div style={{ animation: 'slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-          <div style={{ textAlign: 'center', padding: 'var(--space-6) var(--space-4)', borderBottom: '1px solid #F0ECE6' }}>
-            <img src="/images/logo.png" alt="قاعات النعمان" style={{ height: 32, margin: '0 auto var(--space-1)' }} />
-            <span style={{ fontSize: '0.75rem', color: '#999' }}>قاعات النعمان — Al Numan Halls</span>
+          <div style={{ textAlign: 'center', padding: 'var(--space-6) var(--space-4)', borderBottom: '1px solid #E0D8CC', background: '#FAF8F5' }}>
+            <img src="/images/logo.png" alt="قاعات النعمان" style={{ height: 36, margin: '0 auto var(--space-1)' }} />
+            <span style={{ fontSize: '0.75rem', color: softGold }}>قاعات النعمان — Al Numan Halls</span>
           </div>
 
           <div style={{ padding: 'var(--space-8) var(--space-4)' }}>
             <div style={{
               maxWidth: 440,
               margin: '0 auto',
-              background: '#FAFAF7',
-              border: `1px solid #EBE5DB`,
+              background: '#FFFFFF',
+              border: '1px solid #E0D8CC',
               borderRadius: 'var(--radius-xl)',
               padding: 'var(--space-8) var(--space-6)',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.04)',
               textAlign: 'center'
             }}>
-              <h3 style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: '1.4rem',
-                color: '#2C2417',
-                marginBottom: 'var(--space-6)',
-                fontWeight: 'normal'
-              }}>
-                معلومات الحفل
-              </h3>
+              <span style={{ color: softGold, fontSize: '0.8rem', letterSpacing: '2px', display: 'block', marginBottom: 'var(--space-4)' }}>
+                تفاصيل الحفل
+              </span>
 
-              {(groomFather || brideFather) && (
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginBottom: 'var(--space-6)',
-                  paddingBottom: 'var(--space-4)',
-                  borderBottom: `1px solid #E0D8CC`,
-                  fontSize: '0.85rem'
-                }}>
-                  {brideFather && (
-                    <div style={{ flex: 1, textAlign: 'right' }}>
-                      <span style={{ display: 'block', color: '#888', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
-                      <strong style={{ color: '#2C2417', display: 'block' }}>{brideFather}</strong>
-                      {brideMother && <span style={{ color: '#666', fontSize: '0.8rem' }}>{brideMother}</span>}
-                    </div>
-                  )}
-                  <div style={{ width: 1, background: '#E0D8CC', margin: '0 var(--space-3)' }} />
-                  {groomFather && (
-                    <div style={{ flex: 1, textAlign: 'left' }}>
-                      <span style={{ display: 'block', color: '#888', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
-                      <strong style={{ color: '#2C2417', display: 'block' }}>{groomFather}</strong>
-                      {groomMother && <span style={{ color: '#666', fontSize: '0.8rem' }}>{groomMother}</span>}
-                    </div>
-                  )}
-                </div>
-              )}
-
-              <p style={{ fontSize: '0.95rem', lineHeight: 1.9, color: '#555555', margin: '0 0 var(--space-6) 0', whiteSpace: 'pre-line' }}>
+              <p style={{ fontSize: '0.95rem', lineHeight: 2, color: '#555', margin: '0 0 var(--space-6) 0', whiteSpace: 'pre-line' }}>
                 {invitationMessage}
               </p>
 
@@ -247,7 +227,7 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid #E0D8CC` }}>
                   <div style={{ fontSize: '0.85rem', color: '#888' }}>حفل الزفاف في</div>
                   <div style={{ fontSize: '1rem', fontWeight: 'bold', color: '#2C2417', marginTop: 2 }}>
-                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                    {dateInfo.weekday} في {weddingTime || '19:30'}
                   </div>
                   <div style={{
                     display: 'flex',
@@ -257,14 +237,14 @@ export default function SoftMinimal({ weddingData = {}, slug = '', isPreview = f
                     marginTop: 'var(--space-2)'
                   }}>
                     <div style={{ fontSize: '3.5rem', fontWeight: 'normal', color: softGold, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
-                      {new Date(weddingDate).getDate()}
+                      {dateInfo.day}
                     </div>
                     <div style={{ textAlign: 'right', borderRight: `2px solid ${softGold}`, paddingRight: 'var(--space-2)' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#2C2417' }}>
-                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                        {dateInfo.monthName}
                       </div>
                       <div style={{ color: '#888', fontSize: '0.9rem' }}>
-                        {new Date(weddingDate).getFullYear()}
+                        {dateInfo.year}
                       </div>
                     </div>
                   </div>

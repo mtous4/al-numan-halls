@@ -227,9 +227,7 @@ export default function GuestAlbumPage({ params }) {
         ctx.fillText(`« ${caption.trim()} »`, canvas.width / 2, canvas.height - 40);
       }
 
-      ctx.fillStyle = '#8A7D6B';
-      ctx.font = '16px sans-serif';
-      const dateStr = new Date().toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+      const dateStr = new Date().toLocaleDateString('ar-JO-u-ca-gregory', { year: 'numeric', month: 'short', day: 'numeric' });
       ctx.fillText(`قاعات النعمان • ${dateStr}`, canvas.width / 2, canvas.height - 15);
 
       const finalFramedDataUrl = canvas.toDataURL('image/jpeg', 0.90);
@@ -327,7 +325,7 @@ export default function GuestAlbumPage({ params }) {
           {event.title}
         </h1>
         <p style={{ fontSize: '0.9rem', color: '#E8DECC', margin: 0 }}>
-          {event.venue} • {event.eventDate ? new Date(event.eventDate).toLocaleDateString('ar-SA', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
+          {event.venue} • {event.eventDate ? new Date(event.eventDate).toLocaleDateString('ar-JO-u-ca-gregory', { year: 'numeric', month: 'long', day: 'numeric' }) : ''}
         </p>
 
         {/* Floating Action Button for Taking Photos */}

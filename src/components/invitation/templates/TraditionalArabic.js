@@ -7,6 +7,8 @@ import {
   PhotoAlbumStack,
   GuestbookSection,
   FloatingAudioButton,
+  LuxuryMonogramSeal,
+  formatArabicDate,
   startGuidedTour
 } from '@/components/invitation/sections/SharedElements';
 import { playEnvelopeOpenSound, weddingSynth } from '@/lib/weddingAudio';
@@ -34,38 +36,39 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
   };
 
   const {
-    groomName = 'يوسف',
-    groomFullName = 'يوسف بن إبراهيم',
-    brideName = 'دانة',
-    brideFullName = 'دانة بنت خليفة',
-    groomFather = 'إبراهيم الحمادي',
-    groomMother = 'موزة المرزوقي',
-    brideFather = 'خليفة الشامسي',
-    brideMother = 'عائشة النعيمي',
-    weddingDate = '2027-04-17',
+    groomName = 'سلطان',
+    groomFullName = 'سلطان بن فيصل',
+    brideName = 'شمس',
+    brideFullName = 'شمس بنت عبدالله',
+    groomFather = 'فيصل القحطاني',
+    groomMother = 'منيرة الدوسري',
+    brideFather = 'عبدالله الشمري',
+    brideMother = 'لطيفة العتيبي',
+    weddingDate = '2027-05-14',
     weddingTime = '19:30',
-    venue = 'قاعة الملكية - قاعات النعمان',
-    venueAddress = 'عمّان، شارع المدينة المنوّرة',
+    venue = 'قاعة الأندلس - قاعات النعمان',
+    venueAddress = 'عمّان، شارع الملكة رانيا',
     mapUrl = 'https://maps.google.com/?q=31.9539,35.9106',
-    invitationMessage = 'بأسمى آيات الفرح والسرور، وبقلوب ملؤها المحبة، يتشرف يوسف ودانة بدعوتكم لحضور حفل زفافهما المبارك.',
+    invitationMessage = 'ببالغ الفرح والسرور، يتشرف فيصل القحطاني وعبدالله الشمري بدعوتكم لحضور حفل زفاف نجليهما سلطان وشمس.',
     photos = [
       '/images/gallery/couple-1.jpg',
-      '/images/halls/hall-royal.jpg',
       '/images/halls/hall-andalus.jpg',
+      '/images/halls/hall-royal.jpg',
       '/images/halls/hall-elegance.jpg'
     ],
     schedule = [
-      { name: 'الاستقبال والضيافة', time: '17:30' },
-      { name: 'عقد القران والزفة', time: '18:30' },
+      { name: 'استقبال الضيوف', time: '17:30' },
+      { name: 'بدء الحفل', time: '18:30' },
       { name: 'نخب وقطع الكعكة', time: '18:45' },
-      { name: 'وليمة العشاء', time: '19:00' },
-      { name: 'ختام الحفل المبارك', time: '21:00' },
+      { name: 'العشاء الرئيسي', time: '19:00' },
+      { name: 'ختام الحفل', time: '21:00' },
     ],
   } = weddingData;
 
-  const emeraldGreen = '#1B5E20';
+  const emeraldGreen = '#1E4D2B';
   const goldColor = '#C9A96E';
   const currentUrl = typeof window !== 'undefined' && slug ? `${window.location.origin}/invite/${slug}` : 'https://numanhalls.net';
+  const dateInfo = formatArabicDate(weddingDate);
 
   const handleOpenInvitation = () => {
     playEnvelopeOpenSound();
@@ -83,7 +86,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
 
   return (
     <div style={{
-      background: '#FAFAF7',
+      background: '#FAFBF8',
       color: '#2C2417',
       minHeight: '100%',
       fontFamily: 'var(--font-body)',
@@ -100,7 +103,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
         />
       )}
 
-      {/* Traditional Cover */}
+      {/* Cover */}
       {!opened && (
         <div style={{
           minHeight: isPreview ? '650px' : '100vh',
@@ -110,8 +113,8 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
           justifyContent: 'center',
           textAlign: 'center',
           padding: 'var(--space-8)',
-          background: 'linear-gradient(180deg, #F4F7F4 0%, #E8EFE8 100%)',
-          border: `10px double ${emeraldGreen}`,
+          background: 'linear-gradient(180deg, #F5F7F2 0%, #E8EFE8 100%)',
+          border: `10px solid ${emeraldGreen}22`,
           position: 'relative',
           transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
           transform: opening ? 'scale(0.9) translateY(-50px)' : 'scale(1)',
@@ -124,6 +127,14 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
           <p style={{ fontFamily: 'var(--font-heading)', color: emeraldGreen, fontSize: '1.15rem', fontStyle: 'italic', marginBottom: 'var(--space-4)' }}>
             « بَارَكَ اللَّهُ لَكُمَا وَبَارَكَ عَلَيْكُمَا وَجَمَعَ بَيْنَكُمَا فِي خَيْرٍ »
           </p>
+
+          {/* Luxury Monogram Wax Seal */}
+          <LuxuryMonogramSeal
+            primaryColor={emeraldGreen}
+            groomName={groomName}
+            brideName={brideName}
+            size={70}
+          />
 
           <div style={{
             background: 'rgba(255, 255, 255, 0.9)',
@@ -156,7 +167,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
 
             {weddingDate && (
               <p style={{ color: '#4A5568', fontSize: '0.95rem', marginBottom: 'var(--space-6)' }}>
-                {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                {dateInfo.fullDate}
               </p>
             )}
 
@@ -165,17 +176,17 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
               className="btn btn-primary"
               style={{
                 padding: '0.8rem 2.5rem',
-                borderRadius: '25px',
-                fontSize: '1.1rem',
-                background: `linear-gradient(135deg, ${emeraldGreen}, #2E7D32)`,
+                borderRadius: '30px',
+                background: emeraldGreen,
                 borderColor: goldColor,
-                color: '#FFFFFF',
-                boxShadow: '0 8px 25px rgba(27, 94, 32, 0.3)',
+                boxShadow: `0 8px 25px ${emeraldGreen}44`,
+                width: '100%',
                 cursor: 'pointer',
-                width: '100%'
+                color: '#FFFFFF',
+                fontSize: '1.1rem'
               }}
             >
-              فتح بطاقة الدعوة 🕌
+              افتح بطاقة الدعوة
             </button>
           </div>
         </div>
@@ -184,9 +195,9 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
       {/* Main Content */}
       {opened && (
         <div style={{ animation: 'slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-          <div style={{ textAlign: 'center', padding: 'var(--space-6) var(--space-4)', borderBottom: `2px solid ${goldColor}`, background: '#FFFFFF' }}>
+          <div style={{ textAlign: 'center', padding: 'var(--space-6) var(--space-4)', borderBottom: `1px solid ${emeraldGreen}22`, background: '#FFFFFF' }}>
             <img src="/images/logo.png" alt="قاعات النعمان" style={{ height: 36, margin: '0 auto var(--space-1)' }} />
-            <span style={{ fontSize: '0.75rem', color: emeraldGreen, fontWeight: 'bold' }}>قاعات النعمان — أصالة الضيافة العربية</span>
+            <span style={{ fontSize: '0.75rem', color: emeraldGreen, fontWeight: 'bold' }}>قاعات النعمان — Al Numan Halls</span>
           </div>
 
           {/* Section: Parents & Message Box */}
@@ -195,20 +206,15 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
               maxWidth: 440,
               margin: '0 auto',
               background: '#FFFFFF',
-              border: `2px solid ${emeraldGreen}`,
+              border: `2px solid ${emeraldGreen}33`,
               borderRadius: 'var(--radius-xl)',
               padding: 'var(--space-8) var(--space-6)',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+              boxShadow: '0 8px 25px rgba(0,0,0,0.04)',
               textAlign: 'center'
             }}>
-              <h3 style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: '1.5rem',
-                color: emeraldGreen,
-                marginBottom: 'var(--space-6)'
-              }}>
-                معلومات الحفل
-              </h3>
+              <div style={{ color: goldColor, fontSize: '1.8rem', marginBottom: 'var(--space-2)' }}>
+                ﷽
+              </div>
 
               {(groomFather || brideFather) && (
                 <div style={{
@@ -223,15 +229,15 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
                     <div style={{ flex: 1, textAlign: 'right' }}>
                       <span style={{ display: 'block', color: '#666', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
                       <strong style={{ color: emeraldGreen, display: 'block' }}>{brideFather}</strong>
-                      {brideMother && <span style={{ color: '#444', fontSize: '0.8rem' }}>{brideMother}</span>}
+                      {brideMother && <span style={{ color: '#888', fontSize: '0.8rem' }}>{brideMother}</span>}
                     </div>
                   )}
-                  <div style={{ width: 1, background: `${emeraldGreen}33`, margin: '0 var(--space-3)' }} />
+                  <div style={{ width: 1, background: `${emeraldGreen}22`, margin: '0 var(--space-3)' }} />
                   {groomFather && (
                     <div style={{ flex: 1, textAlign: 'left' }}>
                       <span style={{ display: 'block', color: '#666', fontSize: '0.75rem', marginBottom: 2 }}>السيد والسيدة</span>
                       <strong style={{ color: emeraldGreen, display: 'block' }}>{groomFather}</strong>
-                      {groomMother && <span style={{ color: '#444', fontSize: '0.8rem' }}>{groomMother}</span>}
+                      {groomMother && <span style={{ color: '#888', fontSize: '0.8rem' }}>{groomMother}</span>}
                     </div>
                   )}
                 </div>
@@ -242,11 +248,11 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
               </p>
 
               <div style={{ margin: 'var(--space-6) 0' }}>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.4rem', color: emeraldGreen, margin: 0 }}>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: emeraldGreen, margin: 0 }}>
                   {groomFullName || groomName}
                 </h2>
-                <div style={{ color: goldColor, fontSize: '1.3rem', margin: '0.2rem 0' }}>❊</div>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.4rem', color: emeraldGreen, margin: 0 }}>
+                <div style={{ color: goldColor, fontSize: '1.2rem', margin: '0.2rem 0' }}>✦</div>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '2.5rem', color: emeraldGreen, margin: 0 }}>
                   {brideFullName || brideName}
                 </h2>
               </div>
@@ -255,7 +261,7 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
                 <div style={{ marginTop: 'var(--space-6)', paddingTop: 'var(--space-4)', borderTop: `1px solid ${emeraldGreen}22` }}>
                   <div style={{ fontSize: '0.85rem', color: '#666' }}>حفل الزفاف في</div>
                   <div style={{ fontSize: '1rem', fontWeight: 'bold', color: '#2C2417', marginTop: 2 }}>
-                    {new Date(weddingDate).toLocaleDateString('ar-SA', { weekday: 'long' })} في {weddingTime || '19:30'}
+                    {dateInfo.weekday} في {weddingTime || '19:30'}
                   </div>
                   <div style={{
                     display: 'flex',
@@ -265,14 +271,14 @@ export default function TraditionalArabic({ weddingData = {}, slug = '', isPrevi
                     marginTop: 'var(--space-2)'
                   }}>
                     <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: emeraldGreen, fontFamily: 'var(--font-heading)', lineHeight: 1 }}>
-                      {new Date(weddingDate).getDate()}
+                      {dateInfo.day}
                     </div>
                     <div style={{ textAlign: 'right', borderRight: `2px solid ${emeraldGreen}44`, paddingRight: 'var(--space-2)' }}>
                       <div style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#2C2417' }}>
-                        {new Date(weddingDate).toLocaleDateString('ar-SA', { month: 'long' })}
+                        {dateInfo.monthName}
                       </div>
                       <div style={{ color: '#666', fontSize: '0.9rem' }}>
-                        {new Date(weddingDate).getFullYear()}
+                        {dateInfo.year}
                       </div>
                     </div>
                   </div>
