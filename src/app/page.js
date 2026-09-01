@@ -36,7 +36,7 @@ function HomeContent() {
         </div>
         <div className="hero-overlay" />
         <div className="hero-content">
-          <img src="/images/logo.png" alt="قاعات النعمان" className="hero-logo" style={{ filter: 'brightness(0) invert(1)' }} />
+          <img src="/images/logo-transparent.png" alt="قاعات النعمان" className="hero-logo" />
           <h1>ليلة العمر تبدأ من هنا</h1>
           <p>اكتشف قاعات النعمان الفاخرة وصمّم دعوة زفافك الإلكترونية بأناقة لا مثيل لها</p>
           <div className="hero-actions">

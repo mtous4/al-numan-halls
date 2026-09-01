@@ -796,9 +796,11 @@ textarea.form-input {
 }
 
 .hero-logo {
-  width: 120px;
-  margin: 0 auto var(--space-8);
-  filter: brightness(0) invert(1);
+  width: 180px;
+  height: auto;
+  margin: 0 auto var(--space-6);
+  filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.6));
+  animation: float 4s ease-in-out infinite;
 }
 
 .hero h1 {
