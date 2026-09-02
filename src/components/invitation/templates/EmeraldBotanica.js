@@ -307,8 +307,8 @@ export default function EmeraldBotanica({ weddingData = {}, slug = '', isPreview
           </RevealSection>
 
           <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${sage}33` }}>
-            <span style={{ fontSize: '0.8rem', color: '#6A8F80', display: 'block', marginBottom: 'var(--space-3)' }}>
-              رمز تفاصيل الدعوة
+            <span style={{ fontSize: '0.88rem', fontWeight: 'bold', color: emerald, display: 'block', marginBottom: 'var(--space-3)' }}>
+              امسحوا ال Qr Code وشاركونا الفرحة
             </span>
             <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `1px solid ${sage}`, boxShadow: '0 4px 15px rgba(27,77,62,0.06)' }}>
               <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />

@@ -308,8 +308,8 @@ export default function CrimsonVelvet({ weddingData = {}, slug = '', isPreview =
           </RevealSection>
 
           <div style={{ background: '#FFFFFF', padding: 'var(--space-8) var(--space-4)', textAlign: 'center', borderTop: `1px solid ${gold}33` }}>
-            <span style={{ fontSize: '0.8rem', color: burgundy, display: 'block', marginBottom: 'var(--space-3)' }}>
-              رمز الدعوة الإلكتروني
+            <span style={{ fontSize: '0.88rem', fontWeight: 'bold', color: burgundy, display: 'block', marginBottom: 'var(--space-3)' }}>
+              امسحوا ال Qr Code وشاركونا الفرحة
             </span>
             <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: `1px solid ${gold}`, boxShadow: '0 4px 15px rgba(84,13,29,0.06)' }}>
               <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />

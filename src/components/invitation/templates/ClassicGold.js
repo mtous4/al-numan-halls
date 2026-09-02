@@ -379,8 +379,8 @@ export default function ClassicGold({ weddingData = {}, slug = '', isPreview = f
             textAlign: 'center',
             borderTop: '1px solid #E8DECC'
           }}>
-            <span style={{ fontSize: '0.8rem', color: '#A89B88', display: 'block', marginBottom: 'var(--space-3)' }}>
-              رمز الدعوة الإلكتروني
+            <span style={{ fontSize: '0.88rem', fontWeight: 'bold', color: '#8B7340', display: 'block', marginBottom: 'var(--space-3)' }}>
+              امسحوا ال Qr Code وشاركونا الفرحة
             </span>
             <div style={{ display: 'inline-block', padding: 12, background: '#FFFFFF', borderRadius: '12px', border: '1px solid #E8DECC', boxShadow: '0 4px 15px rgba(0,0,0,0.05)' }}>
               <img src="/images/qr-code.png" alt="رمز QR للدعوة" style={{ width: 140, height: 140, objectFit: 'contain', display: 'block' }} />
